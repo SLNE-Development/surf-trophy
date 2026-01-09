@@ -1,0 +1,38 @@
+package dev.slne.surf.trophy.backend.service
+
+import com.google.auto.service.AutoService
+import dev.slne.surf.surfapi.core.api.util.mutableObject2ObjectMapOf
+import dev.slne.surf.trophy.api.TrophyPlayer
+import dev.slne.surf.trophy.backend.repository.trophyPlayerRepository
+import dev.slne.surf.trophy.core.service.TrophyPlayerService
+import dev.slne.surf.trophy.core.service.trophyPlayerService
+import net.kyori.adventure.util.Services
+import java.util.*
+
+@AutoService(TrophyPlayerService::class)
+class TrophyPlayerServiceImpl : TrophyPlayerService, Services.Fallback {
+    private val players = mutableObject2ObjectMapOf<UUID, TrophyPlayer>()
+
+    override fun findPlayerByUuid(uuid: UUID) = players[uuid]
+
+    override fun findPlayerByName(name: String) = players.values.find { it.name == name }
+
+    override fun cachePlayer(trophyPlayer: TrophyPlayer) {
+        players[trophyPlayer.uuid] = trophyPlayer
+    }
+
+    override suspend fun loadPlayerByUuid(uuid: UUID) =
+        trophyPlayerRepository.loadPlayerByUuid(uuid)
+
+    override suspend fun loadPlayerByName(name: String) = trophyPlayerService.loadPlayerByName(name)
+    override suspend fun loadOrGetPlayerByName(name: String) =
+        trophyPlayerService.loadOrGetPlayerByName(name)
+
+    override suspend fun loadOrGetOrCreatePlayerByUuidAndName(
+        uuid: UUID,
+        name: String
+    ) = trophyPlayerRepository.loadOrGetOrCreatePlayerByUuidAndName(uuid, name)
+
+    override suspend fun savePlayer(trophyPlayer: TrophyPlayer) =
+        trophyPlayerRepository.savePlayer(trophyPlayer)
+}
