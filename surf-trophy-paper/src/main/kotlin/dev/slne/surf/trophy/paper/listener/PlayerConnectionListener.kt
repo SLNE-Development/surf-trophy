@@ -17,6 +17,8 @@ object PlayerConnectionListener : Listener {
                 event.player.name
             )
             trophyPlayerService.cachePlayer(player)
+
+            event.player.inventory.setItemInOffHand(player.selectedTrophy?.trophy?.item)
         }
     }
 

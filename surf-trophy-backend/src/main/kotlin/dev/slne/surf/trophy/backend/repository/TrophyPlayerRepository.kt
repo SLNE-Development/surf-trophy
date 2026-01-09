@@ -7,14 +7,17 @@ import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.deleteWhere
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.insert
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.selectAll
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
+import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.upsert
+import dev.slne.surf.surfapi.core.api.util.mutableObjectListOf
 import dev.slne.surf.surfapi.core.api.util.toMutableObjectList
 import dev.slne.surf.trophy.api.player.TrophyPlayer
 import dev.slne.surf.trophy.api.trophy.ReceivedTrophy
 import dev.slne.surf.trophy.api.trophy.Trophy
 import dev.slne.surf.trophy.backend.table.PlayerTrophiesTable
+import dev.slne.surf.trophy.backend.table.SelectedTrophyTable
 import dev.slne.surf.trophy.backend.table.TrophiesTable
 import dev.slne.surf.trophy.backend.table.TrophyPlayerTable
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
+import glm_.value
 import it.unimi.dsi.fastutil.objects.ObjectList
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
@@ -33,7 +36,8 @@ class TrophyPlayerRepository {
             ?.let { row ->
                 createPlayerFromRow(
                     row,
-                    loadReceivedTrophies(row[TrophyPlayerTable.id].value)
+                    loadReceivedTrophies(row[TrophyPlayerTable.id].value),
+                    loadSelectedTrophy(row[TrophyPlayerTable.id].value)
                 )
             }
     }
@@ -46,7 +50,8 @@ class TrophyPlayerRepository {
             ?.let { row ->
                 createPlayerFromRow(
                     row,
-                    loadReceivedTrophies(row[TrophyPlayerTable.id].value)
+                    loadReceivedTrophies(row[TrophyPlayerTable.id].value),
+                    loadSelectedTrophy(row[TrophyPlayerTable.id].value)
                 )
             }
     }
@@ -118,7 +123,7 @@ class TrophyPlayerRepository {
                     it[TrophyPlayerTable.name] = name
                 }
 
-                TrophyPlayer(uuid, name, ObjectArrayList())
+                TrophyPlayer(uuid, name, mutableObjectListOf(), null)
             }
     }
 
@@ -144,6 +149,19 @@ class TrophyPlayerRepository {
                 it[receivedAt] = received.receivedAt
             }
         }
+
+        SelectedTrophyTable.deleteWhere { SelectedTrophyTable.playerId eq playerId }
+        trophyPlayer.selectedTrophy?.let { selectedTrophy ->
+            val trophyId =
+                TrophiesTable.selectAll().where(TrophiesTable.uuid eq selectedTrophy.trophy.uuid)
+                    .firstOrNull()?.get(TrophiesTable.id)?.value ?: return@let
+
+            SelectedTrophyTable.upsert {
+                it[this.playerId] = playerId
+                it[this.trophyId] = trophyId
+            }
+        }
+        Unit
     }
 
     private suspend fun loadReceivedTrophies(playerId: Long): ObjectList<ReceivedTrophy> =
@@ -157,14 +175,39 @@ class TrophyPlayerRepository {
                 }.toList().toMutableObjectList()
         }
 
+    private suspend fun loadSelectedTrophy(playerId: Long): ReceivedTrophy? =
+        suspendTransaction {
+            val trophyId =
+                SelectedTrophyTable.selectAll().where(SelectedTrophyTable.playerId eq playerId)
+                    .firstOrNull()?.get(SelectedTrophyTable.trophyId)?.value
+                    ?: return@suspendTransaction null
+
+            val trophy = TrophiesTable.selectAll().where(TrophiesTable.id eq trophyId).firstOrNull()
+                ?.let { trophyRow ->
+                    trophyRepository.createTrophyFromRow(trophyRow)
+                } ?: return@suspendTransaction null
+
+            (PlayerTrophiesTable innerJoin TrophiesTable)
+                .selectAll()
+                .where(
+                    (PlayerTrophiesTable.playerId eq playerId) and
+                            (PlayerTrophiesTable.trophyId eq trophyId)
+                ).firstOrNull()?.let {
+                    createReceivedTrophyFromRow(it, trophy)
+                }
+
+        }
+
     private fun createPlayerFromRow(
         row: ResultRow,
-        trophies: ObjectList<ReceivedTrophy>
+        trophies: ObjectList<ReceivedTrophy>,
+        selectedTrophy: ReceivedTrophy?
     ): TrophyPlayer =
         TrophyPlayer(
             row[TrophyPlayerTable.uuid],
             row[TrophyPlayerTable.name],
-            trophies
+            trophies,
+            selectedTrophy
         )
 
     private fun createReceivedTrophyFromRow(

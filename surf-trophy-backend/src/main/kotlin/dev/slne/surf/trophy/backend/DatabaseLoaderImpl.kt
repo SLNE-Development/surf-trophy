@@ -5,6 +5,7 @@ import dev.slne.surf.database.DatabaseApi
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.trophy.backend.table.PlayerTrophiesTable
+import dev.slne.surf.trophy.backend.table.SelectedTrophyTable
 import dev.slne.surf.trophy.backend.table.TrophiesTable
 import dev.slne.surf.trophy.backend.table.TrophyPlayerTable
 import dev.slne.surf.trophy.core.database.DatabaseLoader
@@ -18,7 +19,12 @@ class DatabaseLoaderImpl : DatabaseLoader, Services.Fallback {
         databaseApi = DatabaseApi.create(dataPath)
 
         suspendTransaction {
-            SchemaUtils.create(TrophyPlayerTable, TrophiesTable, PlayerTrophiesTable)
+            SchemaUtils.create(
+                TrophyPlayerTable,
+                TrophiesTable,
+                PlayerTrophiesTable,
+                SelectedTrophyTable
+            )
         }
     }
 

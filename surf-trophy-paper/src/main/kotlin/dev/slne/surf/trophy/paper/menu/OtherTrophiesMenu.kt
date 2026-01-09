@@ -51,6 +51,57 @@ fun otherTrophiesMenu(player: TrophyPlayer, viewer: Player) {
             }
         }
 
+        val selectedPane = StaticPane(0, 4, 1, 1).apply {
+            player.selectedTrophy?.let {
+                addItem(
+                    GuiItem(it.trophy.item.apply {
+                        displayName {
+                            variableValue("Ausgewählte Trophäe".toSmallCaps())
+                        }
+
+                        buildLore {
+                            emptyLine()
+                            line {
+                                variableValue("Name:".toSmallCaps())
+                            }
+
+                            line {
+                                note(it.trophy.name)
+                            }
+                            
+                            emptyLine()
+                            line {
+                                variableValue("Beschreibung:".toSmallCaps())
+                            }
+
+                            line {
+                                note(it.trophy.description)
+                            }
+
+                            emptyLine()
+
+                            line {
+                                variableValue("Erhalten am:".toSmallCaps())
+                            }
+
+                            line {
+                                note(
+                                    dateTimeFormatter.format(
+                                        ZonedDateTime.ofInstant(
+                                            Instant.ofEpochMilli(it.receivedAt),
+                                            ZoneId.of("Europe/Berlin")
+                                        )
+                                    )
+                                )
+                            }
+                        }
+                    }),
+                    0,
+                    0
+                )
+            }
+        }
+
         val contentPane = PaginatedPane(1, 1, 7, 4)
 
         contentPane.populateWithItemStacks(player.trophies.map {
@@ -91,6 +142,10 @@ fun otherTrophiesMenu(player: TrophyPlayer, viewer: Player) {
 
         addPane(outlinePane)
         addPane(contentPane)
+
+        player.selectedTrophy?.let {
+            addPane(selectedPane)
+        }
 
         setOnGlobalDrag { it.cancel() }
         setOnGlobalClick { it.cancel() }

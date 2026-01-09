@@ -7,5 +7,6 @@ import java.util.*
 data class TrophyPlayer(
     val uuid: UUID,
     val name: String,
-    val trophies: ObjectList<ReceivedTrophy>
+    val trophies: ObjectList<ReceivedTrophy>,
+    var selectedTrophy: ReceivedTrophy?
 )

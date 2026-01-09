@@ -1,5 +1,6 @@
 package dev.slne.surf.trophy.paper.menu
 
+import com.github.shynixn.mccoroutine.folia.launch
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.pane.PaginatedPane
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
@@ -10,11 +11,18 @@ import dev.slne.surf.surfapi.bukkit.api.event.cancel
 import dev.slne.surf.surfapi.bukkit.api.inventory.dsl.menu
 import dev.slne.surf.surfapi.core.api.font.toSmallCaps
 import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
+import dev.slne.surf.surfapi.core.api.messages.adventure.plain
+import dev.slne.surf.surfapi.core.api.messages.adventure.sendText
 import dev.slne.surf.surfapi.core.api.util.dateTimeFormatter
 import dev.slne.surf.trophy.api.player.TrophyPlayer
+import dev.slne.surf.trophy.api.trophy.ReceivedTrophy
+import dev.slne.surf.trophy.core.service.trophyPlayerService
+import dev.slne.surf.trophy.paper.plugin
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -51,8 +59,8 @@ fun ownTrophiesMenu(player: TrophyPlayer) {
 
         val contentPane = PaginatedPane(1, 1, 7, 4)
 
-        contentPane.populateWithItemStacks(player.trophies.map {
-            it.trophy.item.apply {
+        contentPane.populateWithGuiItems(player.trophies.map {
+            GuiItem(it.trophy.item.apply {
                 displayName {
                     variableValue(it.trophy.name)
                 }
@@ -84,8 +92,39 @@ fun ownTrophiesMenu(player: TrophyPlayer) {
                         )
                     }
                 }
+            }) { event ->
+                val bukkitPlayer = event.whoClicked as? Player ?: return@GuiItem
+                val trophy = getTrophyByItem(event.currentItem, bukkitPlayer)
+
+                if (player.selectedTrophy?.trophy?.uuid == trophy?.trophy?.uuid) {
+                    player.selectedTrophy = null
+                    bukkitPlayer.inventory.setItemInOffHand(player.selectedTrophy?.trophy?.item)
+                    bukkitPlayer.sendText {
+                        appendPrefix()
+                        success("Du hast die Trophäe ")
+                        variableValue(trophy?.trophy?.name ?: "Unbekannt")
+                        success(" abgewählt.")
+                    }
+                    return@GuiItem
+                }
+
+                player.selectedTrophy = trophy
+                bukkitPlayer.inventory.setItemInOffHand(player.selectedTrophy?.trophy?.item)
+
+                bukkitPlayer.sendText {
+                    appendPrefix()
+                    success("Du hast die Trophäe ")
+                    variableValue(trophy?.trophy?.name ?: "Unbekannt")
+                    success(" ausgewählt.")
+                }
             }
         })
+
+        setOnClose {
+            plugin.launch {
+                trophyPlayerService.savePlayer(player)
+            }
+        }
 
         addPane(outlinePane)
         addPane(contentPane)
@@ -93,4 +132,13 @@ fun ownTrophiesMenu(player: TrophyPlayer) {
         setOnGlobalDrag { it.cancel() }
         setOnGlobalClick { it.cancel() }
     }.show(Bukkit.getPlayer(player.uuid) ?: return)
+}
+
+private fun getTrophyByItem(itemStack: ItemStack?, player: Player): ReceivedTrophy? {
+    if (itemStack == null) {
+        return null
+    }
+
+    val trophyPlayer = trophyPlayerService.findPlayerByUuid(player.uniqueId) ?: return null
+    return trophyPlayer.trophies.find { it.trophy.name == itemStack.displayName().plain() }
 }
