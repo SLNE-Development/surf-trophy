@@ -29,6 +29,13 @@ private const val width = 9
 private const val height = 6
 
 fun ownTrophiesMenu(player: TrophyPlayer) {
+    if (player.trophies.isEmpty()) {
+        val bukkitPlayer =
+            Bukkit.getPlayer(player.uuid) ?: error("Player to trophy player not found")
+        noTrophiesMenu(bukkitPlayer, bukkitPlayer)
+        return
+    }
+
     menu(buildText { note("Deine Trophäen".toSmallCaps(), TextDecoration.BOLD) }, 6) {
         val outlinePane = StaticPane(0, 0, width, height).apply {
             for (y in 1 until height - 1) {

@@ -46,7 +46,7 @@ class TrophyPlayerServiceImpl : TrophyPlayerService, Services.Fallback {
         player: TrophyPlayer,
         trophy: Trophy
     ): Boolean {
-        player.trophies.removeIf { it == trophy }
+        player.trophies.removeIf { it.trophy.uuid == trophy.uuid }
 
         trophyPlayerService.cachePlayer(player)
         return trophyPlayerRepository.takeTrophy(player, trophy)
