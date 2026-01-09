@@ -146,16 +146,9 @@ private fun getTrophyByItem(itemStack: ItemStack?, player: Player): ReceivedTrop
     if (itemStack == null) {
         return null
     }
-    val name = itemStack.displayName().plain()
-
-    println("Searching for trophy with name: $name for player: ${player.name}")
-
+    val name = itemStack.displayName().plain().replace("[", "").replace("]", "")
     val trophyPlayer = trophyPlayerService.findPlayerByUuid(player.uniqueId) ?: return null
-
-    println("Loaded trophy player: $trophyPlayer")
-
     val trophy = trophyPlayer.trophies.find { it.trophy.name == name }
 
-    println("Found trophy: $trophy")
     return trophy
 }
