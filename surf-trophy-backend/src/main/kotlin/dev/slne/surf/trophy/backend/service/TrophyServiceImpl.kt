@@ -1,6 +1,7 @@
 package dev.slne.surf.trophy.backend.service
 
 import com.google.auto.service.AutoService
+import dev.slne.surf.surfapi.core.api.util.logger
 import dev.slne.surf.surfapi.core.api.util.mutableObjectSetOf
 import dev.slne.surf.surfapi.core.api.util.toObjectSet
 import dev.slne.surf.trophy.api.trophy.Trophy
@@ -11,6 +12,7 @@ import java.util.*
 
 @AutoService(TrophyService::class)
 class TrophyServiceImpl : TrophyService, Services.Fallback {
+    private val log = logger()
     private val trophies = mutableObjectSetOf<Trophy>()
 
     override fun findTrophyByName(name: String) = trophies.find { it.name == name }
@@ -28,6 +30,8 @@ class TrophyServiceImpl : TrophyService, Services.Fallback {
     override suspend fun refreshTrophies() {
         trophies.clear()
         trophies.addAll(loadTrophies())
+
+        log.atInfo().log("Trophy cache refreshed, total trophies: ${trophies.size}")
     }
 
     override suspend fun loadTrophyByUuid(uuid: UUID) = trophyRepository.loadTrophyByUuid(uuid)

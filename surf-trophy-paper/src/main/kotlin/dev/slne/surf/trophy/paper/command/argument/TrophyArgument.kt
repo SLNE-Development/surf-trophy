@@ -12,17 +12,18 @@ import dev.slne.surf.trophy.core.service.trophyService
 
 class TrophyArgument(nodeName: String) :
     CustomArgument<Trophy, String>(TextArgument(nodeName), { info ->
-        trophyService.findTrophyByName(info.input)
+        val input = info.input.replace("-", " ")
+        trophyService.findTrophyByName(input)
             ?: throw CustomArgumentException.fromAdventureComponent(
                 buildText {
                     appendPrefix()
-                    error("Die Trophäe wurde nicht gefunden.")
+                    error("Die Trophäe '$input' wurde nicht gefunden.")
                 })
     }) {
     init {
         this.replaceSuggestions(
             ArgumentSuggestions.stringCollection {
-                trophyService.getTrophies().map { "\"${it.name}\"" }
+                trophyService.getTrophies().map { it.name.replace(" ", "-") }
             }
         )
     }

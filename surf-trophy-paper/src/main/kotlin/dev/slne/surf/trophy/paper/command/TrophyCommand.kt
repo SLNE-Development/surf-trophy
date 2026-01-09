@@ -139,6 +139,10 @@ fun trophyCommand() = commandTree("trophy") {
                         listOf(buildText {
                             spacer("- ")
                             variableValue(trophy.name)
+
+                            hoverEvent(buildText {
+                                variableValue(trophy.description)
+                            })
                         })
                     }
                 }
