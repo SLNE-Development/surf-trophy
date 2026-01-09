@@ -1,4 +1,4 @@
-package dev.slne.surf.trophy.api
+package dev.slne.surf.trophy.api.trophy
 
 data class ReceivedTrophy(
     val trophy: Trophy,

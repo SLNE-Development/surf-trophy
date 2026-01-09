@@ -3,7 +3,7 @@ package dev.slne.surf.trophy.backend.service
 import com.google.auto.service.AutoService
 import dev.slne.surf.surfapi.core.api.util.mutableObjectSetOf
 import dev.slne.surf.surfapi.core.api.util.toObjectSet
-import dev.slne.surf.trophy.api.Trophy
+import dev.slne.surf.trophy.api.trophy.Trophy
 import dev.slne.surf.trophy.backend.repository.trophyRepository
 import dev.slne.surf.trophy.core.service.TrophyService
 import net.kyori.adventure.util.Services
@@ -32,7 +32,10 @@ class TrophyServiceImpl : TrophyService, Services.Fallback {
 
     override suspend fun loadTrophyByUuid(uuid: UUID) = trophyRepository.loadTrophyByUuid(uuid)
     override suspend fun saveTrophy(trophy: Trophy) = trophyRepository.saveTrophy(trophy)
-    override suspend fun deleteTrophy(trophy: Trophy) = trophyRepository.deleteTrophy(trophy)
+    override suspend fun deleteTrophy(trophy: Trophy) {
+        invalidateTrophy(trophy)
+        trophyRepository.deleteTrophy(trophy)
+    }
 
     override suspend fun loadTrophies() = trophyRepository.loadTrophies()
 }

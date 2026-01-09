@@ -2,9 +2,9 @@ package dev.slne.surf.trophy.backend.service
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.surfapi.core.api.util.mutableObject2ObjectMapOf
-import dev.slne.surf.trophy.api.ReceivedTrophy
-import dev.slne.surf.trophy.api.Trophy
-import dev.slne.surf.trophy.api.TrophyPlayer
+import dev.slne.surf.trophy.api.player.TrophyPlayer
+import dev.slne.surf.trophy.api.trophy.ReceivedTrophy
+import dev.slne.surf.trophy.api.trophy.Trophy
 import dev.slne.surf.trophy.backend.repository.trophyPlayerRepository
 import dev.slne.surf.trophy.core.service.TrophyPlayerService
 import dev.slne.surf.trophy.core.service.trophyPlayerService
@@ -44,7 +44,7 @@ class TrophyPlayerServiceImpl : TrophyPlayerService, Services.Fallback {
 
     override suspend fun takeTrophy(
         player: TrophyPlayer,
-        trophy: ReceivedTrophy
+        trophy: Trophy
     ): Boolean {
         player.trophies.removeIf { it == trophy }
 

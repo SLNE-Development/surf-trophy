@@ -8,9 +8,9 @@ import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.insert
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.selectAll
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.surfapi.core.api.util.toMutableObjectList
-import dev.slne.surf.trophy.api.ReceivedTrophy
-import dev.slne.surf.trophy.api.Trophy
-import dev.slne.surf.trophy.api.TrophyPlayer
+import dev.slne.surf.trophy.api.player.TrophyPlayer
+import dev.slne.surf.trophy.api.trophy.ReceivedTrophy
+import dev.slne.surf.trophy.api.trophy.Trophy
 import dev.slne.surf.trophy.backend.table.PlayerTrophiesTable
 import dev.slne.surf.trophy.backend.table.TrophiesTable
 import dev.slne.surf.trophy.backend.table.TrophyPlayerTable
@@ -81,7 +81,7 @@ class TrophyPlayerRepository {
             true
         }
 
-    suspend fun takeTrophy(player: TrophyPlayer, trophy: ReceivedTrophy): Boolean =
+    suspend fun takeTrophy(player: TrophyPlayer, trophy: Trophy): Boolean =
         suspendTransaction {
             val playerRow = TrophyPlayerTable
                 .selectAll()
@@ -93,7 +93,7 @@ class TrophyPlayerRepository {
 
             val trophyRow = TrophiesTable
                 .selectAll()
-                .where(TrophiesTable.uuid eq trophy.trophy.uuid)
+                .where(TrophiesTable.uuid eq trophy.uuid)
                 .firstOrNull()
                 ?: return@suspendTransaction false
 

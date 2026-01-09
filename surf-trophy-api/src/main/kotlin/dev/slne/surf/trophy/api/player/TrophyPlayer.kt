@@ -1,5 +1,6 @@
-package dev.slne.surf.trophy.api
+package dev.slne.surf.trophy.api.player
 
+import dev.slne.surf.trophy.api.trophy.ReceivedTrophy
 import it.unimi.dsi.fastutil.objects.ObjectList
 import java.util.*
 

@@ -11,7 +11,7 @@ import dev.slne.surf.surfapi.bukkit.api.inventory.dsl.menu
 import dev.slne.surf.surfapi.core.api.font.toSmallCaps
 import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
 import dev.slne.surf.surfapi.core.api.util.dateTimeFormatter
-import dev.slne.surf.trophy.api.TrophyPlayer
+import dev.slne.surf.trophy.api.player.TrophyPlayer
 import org.bukkit.Bukkit
 import org.bukkit.Material
 

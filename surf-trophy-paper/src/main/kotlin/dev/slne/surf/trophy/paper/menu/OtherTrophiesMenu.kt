@@ -11,9 +11,10 @@ import dev.slne.surf.surfapi.bukkit.api.inventory.dsl.menu
 import dev.slne.surf.surfapi.core.api.font.toSmallCaps
 import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
 import dev.slne.surf.surfapi.core.api.util.dateTimeFormatter
-import dev.slne.surf.trophy.api.TrophyPlayer
+import dev.slne.surf.trophy.api.player.TrophyPlayer
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.entity.Player
 import java.time.Instant
 
 private val borderItem = GuiItem(buildItem(Material.GRAY_STAINED_GLASS_PANE) {
@@ -25,7 +26,7 @@ private val borderItem = GuiItem(buildItem(Material.GRAY_STAINED_GLASS_PANE) {
 private const val width = 9
 private const val height = 6
 
-fun otherTrophiesMenu(player: TrophyPlayer) {
+fun otherTrophiesMenu(player: TrophyPlayer, viewer: Player) {
     menu(buildText { variableValue("Trophäen von ${player.name}".toSmallCaps()) }, 6) {
         val outlinePane = StaticPane(0, 0, width, height).apply {
             for (y in 1 until height - 1) {
@@ -75,5 +76,5 @@ fun otherTrophiesMenu(player: TrophyPlayer) {
 
         setOnGlobalDrag { it.cancel() }
         setOnGlobalClick { it.cancel() }
-    }.show(Bukkit.getPlayer(player.uuid) ?: return)
+    }.show(Bukkit.getPlayer(viewer.uniqueId) ?: return)
 }

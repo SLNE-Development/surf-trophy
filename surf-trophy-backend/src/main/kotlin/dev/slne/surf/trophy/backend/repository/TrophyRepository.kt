@@ -7,7 +7,7 @@ import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.selectAll
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.upsert
 import dev.slne.surf.surfapi.core.api.util.toObjectSet
-import dev.slne.surf.trophy.api.Trophy
+import dev.slne.surf.trophy.api.trophy.Trophy
 import dev.slne.surf.trophy.backend.table.TrophiesTable
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import kotlinx.coroutines.flow.firstOrNull
