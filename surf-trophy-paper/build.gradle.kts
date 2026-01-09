@@ -12,4 +12,5 @@ surfPaperPluginApi {
 
 dependencies {
     api(project(":surf-trophy-core"))
+    runtimeOnly(project(":surf-trophy-backend"))
 }

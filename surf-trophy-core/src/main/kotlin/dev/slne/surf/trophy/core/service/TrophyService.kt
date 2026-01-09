@@ -19,5 +19,5 @@ interface TrophyService {
     suspend fun loadTrophyByUuid(uuid: UUID): Trophy?
     suspend fun saveTrophy(trophy: Trophy)
 
-    suspend fun loadTrophies()
+    suspend fun loadTrophies(): ObjectSet<Trophy>
 }

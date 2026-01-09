@@ -21,7 +21,11 @@ class TrophyServiceImpl : TrophyService, Services.Fallback {
         trophies.add(trophy)
     }
 
-    override suspend fun refreshTrophies() = trophyRepository.refreshTrophies()
+    override suspend fun refreshTrophies() {
+        trophies.clear()
+        trophies.addAll(loadTrophies())
+    }
+
     override suspend fun loadTrophyByUuid(uuid: UUID) = trophyRepository.loadTrophyByUuid(uuid)
     override suspend fun saveTrophy(trophy: Trophy) = trophyRepository.saveTrophy(trophy)
     override suspend fun loadTrophies() = trophyRepository.loadTrophies()
