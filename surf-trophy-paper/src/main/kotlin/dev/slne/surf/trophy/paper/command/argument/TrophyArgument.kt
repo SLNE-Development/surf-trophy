@@ -12,7 +12,7 @@ import dev.slne.surf.trophy.core.service.trophyService
 
 class TrophyArgument(nodeName: String) :
     CustomArgument<Trophy, String>(TextArgument(nodeName), { info ->
-        val input = info.input.replace("-", " ")
+        val input = info.input.replace("\"", "")
         trophyService.findTrophyByName(input)
             ?: throw CustomArgumentException.fromAdventureComponent(
                 buildText {
@@ -23,7 +23,7 @@ class TrophyArgument(nodeName: String) :
     init {
         this.replaceSuggestions(
             ArgumentSuggestions.stringCollection {
-                trophyService.getTrophies().map { it.name.replace(" ", "-") }
+                trophyService.getTrophies().map { "\"${it.name}\"" }
             }
         )
     }

@@ -12,8 +12,12 @@ import dev.slne.surf.surfapi.core.api.font.toSmallCaps
 import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
 import dev.slne.surf.surfapi.core.api.util.dateTimeFormatter
 import dev.slne.surf.trophy.api.player.TrophyPlayer
+import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 private val borderItem = GuiItem(buildItem(Material.GRAY_STAINED_GLASS_PANE) {
     displayName {
@@ -25,7 +29,7 @@ private const val width = 9
 private const val height = 6
 
 fun ownTrophiesMenu(player: TrophyPlayer) {
-    menu(buildText { variableValue("Deine Trophäen".toSmallCaps()) }, 6) {
+    menu(buildText { note("Deine Trophäen".toSmallCaps(), TextDecoration.BOLD) }, 6) {
         val outlinePane = StaticPane(0, 0, width, height).apply {
             for (y in 1 until height - 1) {
                 addItem(borderItem, 0, y)
@@ -63,7 +67,14 @@ fun ownTrophiesMenu(player: TrophyPlayer) {
                     }
 
                     line {
-                        note(dateTimeFormatter.format(java.time.Instant.ofEpochMilli(it.receivedAt)))
+                        note(
+                            dateTimeFormatter.format(
+                                ZonedDateTime.ofInstant(
+                                    Instant.ofEpochMilli(it.receivedAt),
+                                    ZoneId.of("Europe/Berlin")
+                                )
+                            )
+                        )
                     }
                 }
             }
