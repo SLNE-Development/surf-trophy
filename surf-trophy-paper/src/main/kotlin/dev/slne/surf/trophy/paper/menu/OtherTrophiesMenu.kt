@@ -2,6 +2,7 @@ package dev.slne.surf.trophy.paper.menu
 
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.pane.PaginatedPane
+import com.github.stefvanschie.inventoryframework.pane.Pane
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import dev.slne.surf.surfapi.bukkit.api.builder.buildItem
 import dev.slne.surf.surfapi.bukkit.api.builder.buildLore
@@ -51,7 +52,7 @@ fun otherTrophiesMenu(player: TrophyPlayer, viewer: Player) {
             }
         }
 
-        val selectedPane = StaticPane(0, 4, 1, 1).apply {
+        val selectedPane = StaticPane(4, 0, 1, 1, Pane.Priority.HIGHEST).apply {
             player.selectedTrophy?.let {
                 addItem(
                     GuiItem(it.trophy.item.apply {
@@ -68,7 +69,7 @@ fun otherTrophiesMenu(player: TrophyPlayer, viewer: Player) {
                             line {
                                 note(it.trophy.name)
                             }
-                            
+
                             emptyLine()
                             line {
                                 variableValue("Beschreibung:".toSmallCaps())

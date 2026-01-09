@@ -65,16 +65,6 @@ fun ownTrophiesMenu(player: TrophyPlayer) {
                     variableValue(it.trophy.name)
                 }
 
-                if (player.selectedTrophy?.trophy?.uuid == it.trophy.uuid) {
-                    editMeta { meta ->
-                        meta.setEnchantmentGlintOverride(true)
-                    }
-                } else {
-                    editMeta { meta ->
-                        meta.setEnchantmentGlintOverride(false)
-                    }
-                }
-
                 buildLore {
                     emptyLine()
                     line {
