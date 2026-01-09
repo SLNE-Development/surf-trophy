@@ -1,12 +1,13 @@
 package dev.slne.surf.trophy.backend.repository
 
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.ResultRow
+import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.and
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.eq
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.deleteWhere
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.insert
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.selectAll
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import dev.slne.surf.surfapi.core.api.util.toObjectList
+import dev.slne.surf.surfapi.core.api.util.toMutableObjectList
 import dev.slne.surf.trophy.api.ReceivedTrophy
 import dev.slne.surf.trophy.api.Trophy
 import dev.slne.surf.trophy.api.TrophyPlayer
@@ -52,6 +53,59 @@ class TrophyPlayerRepository {
 
     suspend fun loadOrGetPlayerByName(name: String): TrophyPlayer? =
         loadPlayerByName(name)
+
+    suspend fun giveTrophy(player: TrophyPlayer, trophy: ReceivedTrophy): Boolean =
+        suspendTransaction {
+            val playerRow = TrophyPlayerTable
+                .selectAll()
+                .where(TrophyPlayerTable.uuid eq player.uuid)
+                .firstOrNull()
+                ?: return@suspendTransaction false
+
+            val playerId = playerRow[TrophyPlayerTable.id].value
+
+            val trophyRow = TrophiesTable
+                .selectAll()
+                .where(TrophiesTable.uuid eq trophy.trophy.uuid)
+                .firstOrNull()
+                ?: return@suspendTransaction false
+
+            val trophyId = trophyRow[TrophiesTable.id].value
+
+            PlayerTrophiesTable.insert {
+                it[this.playerId] = playerId
+                it[this.trophyId] = trophyId
+                it[this.receivedAt] = trophy.receivedAt
+            }
+
+            true
+        }
+
+    suspend fun takeTrophy(player: TrophyPlayer, trophy: ReceivedTrophy): Boolean =
+        suspendTransaction {
+            val playerRow = TrophyPlayerTable
+                .selectAll()
+                .where(TrophyPlayerTable.uuid eq player.uuid)
+                .firstOrNull()
+                ?: return@suspendTransaction false
+
+            val playerId = playerRow[TrophyPlayerTable.id].value
+
+            val trophyRow = TrophiesTable
+                .selectAll()
+                .where(TrophiesTable.uuid eq trophy.trophy.uuid)
+                .firstOrNull()
+                ?: return@suspendTransaction false
+
+            val trophyId = trophyRow[TrophiesTable.id].value
+
+            val deletedRows = PlayerTrophiesTable.deleteWhere {
+                (PlayerTrophiesTable.playerId eq playerId) and
+                        (PlayerTrophiesTable.trophyId eq trophyId)
+            }
+
+            deletedRows > 0
+        }
 
     suspend fun loadOrGetOrCreatePlayerByUuidAndName(
         uuid: UUID,
@@ -100,7 +154,7 @@ class TrophyPlayerRepository {
                 .map { row ->
                     val trophy = trophyRepository.createTrophyFromRow(row)
                     createReceivedTrophyFromRow(row, trophy)
-                }.toList().toObjectList()
+                }.toList().toMutableObjectList()
         }
 
     private fun createPlayerFromRow(

@@ -2,6 +2,8 @@ package dev.slne.surf.trophy.backend.service
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.surfapi.core.api.util.mutableObject2ObjectMapOf
+import dev.slne.surf.trophy.api.ReceivedTrophy
+import dev.slne.surf.trophy.api.Trophy
 import dev.slne.surf.trophy.api.TrophyPlayer
 import dev.slne.surf.trophy.backend.repository.trophyPlayerRepository
 import dev.slne.surf.trophy.core.service.TrophyPlayerService
@@ -29,6 +31,27 @@ class TrophyPlayerServiceImpl : TrophyPlayerService, Services.Fallback {
         trophyPlayerRepository.loadPlayerByUuid(uuid)
 
     override suspend fun loadPlayerByName(name: String) = trophyPlayerService.loadPlayerByName(name)
+    override suspend fun giveTrophy(
+        player: TrophyPlayer,
+        trophy: Trophy
+    ): Boolean {
+        val receiveTrophy = ReceivedTrophy(trophy, System.currentTimeMillis())
+        player.trophies.add(receiveTrophy)
+
+        trophyPlayerService.cachePlayer(player)
+        return trophyPlayerRepository.giveTrophy(player, receiveTrophy)
+    }
+
+    override suspend fun takeTrophy(
+        player: TrophyPlayer,
+        trophy: ReceivedTrophy
+    ): Boolean {
+        player.trophies.removeIf { it == trophy }
+
+        trophyPlayerService.cachePlayer(player)
+        return trophyPlayerRepository.takeTrophy(player, trophy)
+    }
+
     override suspend fun loadOrGetPlayerByName(name: String) =
         players.values.find { it.name == name } ?: loadPlayerByName(name)
 

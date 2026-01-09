@@ -2,6 +2,7 @@ package dev.slne.surf.trophy.backend.repository
 
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.ResultRow
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.eq
+import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.deleteWhere
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.selectAll
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.upsert
@@ -39,6 +40,13 @@ class TrophyRepository {
             it[item] = trophy.item
         }
 
+        Unit
+    }
+
+    suspend fun deleteTrophy(trophy: Trophy) = suspendTransaction {
+        TrophiesTable.deleteWhere {
+            TrophiesTable.uuid eq trophy.uuid
+        }
         Unit
     }
 

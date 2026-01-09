@@ -13,11 +13,13 @@ interface TrophyService {
     fun getTrophies(): ObjectSet<Trophy>
 
     fun cacheTrophy(trophy: Trophy)
+    fun invalidateTrophy(trophy: Trophy)
 
     suspend fun refreshTrophies()
 
     suspend fun loadTrophyByUuid(uuid: UUID): Trophy?
     suspend fun saveTrophy(trophy: Trophy)
+    suspend fun deleteTrophy(trophy: Trophy)
 
     suspend fun loadTrophies(): ObjectSet<Trophy>
 }
