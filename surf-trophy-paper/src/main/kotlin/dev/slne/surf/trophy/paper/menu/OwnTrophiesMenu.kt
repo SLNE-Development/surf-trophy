@@ -65,6 +65,12 @@ fun ownTrophiesMenu(player: TrophyPlayer) {
                     variableValue(it.trophy.name)
                 }
 
+                if (player.selectedTrophy?.trophy?.uuid == it.trophy.uuid) {
+                    editMeta { meta ->
+                        meta.setEnchantmentGlintOverride(true)
+                    }
+                }
+
                 buildLore {
                     emptyLine()
                     line {
@@ -94,15 +100,15 @@ fun ownTrophiesMenu(player: TrophyPlayer) {
                 }
             }) { event ->
                 val bukkitPlayer = event.whoClicked as? Player ?: return@GuiItem
-                val trophy = getTrophyByItem(event.currentItem, bukkitPlayer)
+                val trophy = getTrophyByItem(event.currentItem, bukkitPlayer) ?: return@GuiItem
 
-                if (player.selectedTrophy?.trophy?.uuid == trophy?.trophy?.uuid) {
+                if (player.selectedTrophy?.trophy?.uuid == trophy.trophy.uuid) {
                     player.selectedTrophy = null
                     bukkitPlayer.inventory.setItemInOffHand(player.selectedTrophy?.trophy?.item)
                     bukkitPlayer.sendText {
                         appendPrefix()
                         success("Du hast die Trophäe ")
-                        variableValue(trophy?.trophy?.name ?: "Unbekannt")
+                        variableValue(trophy.trophy.name)
                         success(" abgewählt.")
                     }
                     return@GuiItem
@@ -117,6 +123,8 @@ fun ownTrophiesMenu(player: TrophyPlayer) {
                     variableValue(trophy?.trophy?.name ?: "Unbekannt")
                     success(" ausgewählt.")
                 }
+
+                update()
             }
         })
 
@@ -138,7 +146,16 @@ private fun getTrophyByItem(itemStack: ItemStack?, player: Player): ReceivedTrop
     if (itemStack == null) {
         return null
     }
+    val name = itemStack.displayName().plain()
+
+    println("Searching for trophy with name: $name for player: ${player.name}")
 
     val trophyPlayer = trophyPlayerService.findPlayerByUuid(player.uniqueId) ?: return null
-    return trophyPlayer.trophies.find { it.trophy.name == itemStack.displayName().plain() }
+
+    println("Loaded trophy player: $trophyPlayer")
+
+    val trophy = trophyPlayer.trophies.find { it.trophy.name == name }
+
+    println("Found trophy: $trophy")
+    return trophy
 }
