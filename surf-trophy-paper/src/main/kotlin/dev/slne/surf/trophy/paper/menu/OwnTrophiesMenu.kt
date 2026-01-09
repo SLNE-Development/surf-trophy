@@ -69,6 +69,10 @@ fun ownTrophiesMenu(player: TrophyPlayer) {
                     editMeta { meta ->
                         meta.setEnchantmentGlintOverride(true)
                     }
+                } else {
+                    editMeta { meta ->
+                        meta.setEnchantmentGlintOverride(false)
+                    }
                 }
 
                 buildLore {
