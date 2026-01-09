@@ -21,12 +21,19 @@ class TrophyPlayerServiceImpl : TrophyPlayerService, Services.Fallback {
         players[trophyPlayer.uuid] = trophyPlayer
     }
 
+    override fun invalidatePlayer(playerUuid: UUID) {
+        players.remove(playerUuid)
+    }
+
     override suspend fun loadPlayerByUuid(uuid: UUID) =
         trophyPlayerRepository.loadPlayerByUuid(uuid)
 
     override suspend fun loadPlayerByName(name: String) = trophyPlayerService.loadPlayerByName(name)
     override suspend fun loadOrGetPlayerByName(name: String) =
-        trophyPlayerService.loadOrGetPlayerByName(name)
+        players.values.find { it.name == name } ?: loadPlayerByName(name)
+
+    override suspend fun loadOrGetPlayerByUuid(uuid: UUID) =
+        players.values.find { it.uuid == uuid } ?: loadPlayerByUuid(uuid)
 
     override suspend fun loadOrGetOrCreatePlayerByUuidAndName(
         uuid: UUID,

@@ -11,11 +11,13 @@ interface TrophyPlayerService {
     fun findPlayerByName(name: String): TrophyPlayer?
 
     fun cachePlayer(trophyPlayer: TrophyPlayer)
+    fun invalidatePlayer(playerUuid: UUID)
 
     suspend fun loadPlayerByUuid(uuid: UUID): TrophyPlayer?
     suspend fun loadPlayerByName(name: String): TrophyPlayer?
 
     suspend fun loadOrGetPlayerByName(name: String): TrophyPlayer?
+    suspend fun loadOrGetPlayerByUuid(uuid: UUID): TrophyPlayer?
     suspend fun loadOrGetOrCreatePlayerByUuidAndName(uuid: UUID, name: String): TrophyPlayer
 
     suspend fun savePlayer(trophyPlayer: TrophyPlayer)
