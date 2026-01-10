@@ -34,7 +34,7 @@ private val borderItem = GuiItem(buildItem(Material.GRAY_STAINED_GLASS_PANE) {
 })
 
 private const val width = 9
-private const val height = 6
+private const val height = 4
 
 fun ownTrophiesMenu(player: TrophyPlayer) {
     if (player.trophies.isEmpty()) {
@@ -44,7 +44,7 @@ fun ownTrophiesMenu(player: TrophyPlayer) {
         return
     }
 
-    menu(buildText { note("Deine Trophäen".toSmallCaps(), TextDecoration.BOLD) }, 6) {
+    menu(buildText { note("Deine Trophäen".toSmallCaps(), TextDecoration.BOLD) }, height) {
         val outlinePane = StaticPane(0, 0, width, height).apply {
             for (y in 1 until height - 1) {
                 addItem(borderItem, 0, y)
@@ -57,7 +57,7 @@ fun ownTrophiesMenu(player: TrophyPlayer) {
             }
         }
 
-        val contentPane = PaginatedPane(1, 1, 7, 4)
+        val contentPane = PaginatedPane(1, 1, 7, height - 2)
 
         contentPane.populateWithGuiItems(player.trophies.map {
             GuiItem(it.trophy.item.apply {
