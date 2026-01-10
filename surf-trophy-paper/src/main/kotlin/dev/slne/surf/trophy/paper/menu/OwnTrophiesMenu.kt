@@ -136,7 +136,7 @@ fun ownTrophiesMenu(player: TrophyPlayer) {
                 )
             }
 
-            if (contentPane.page < contentPane.pages) {
+            if (contentPane.page < contentPane.pages - 1) {
                 addItem(
                     GuiItem(buildItem(Material.ARROW) {
                         displayName {
