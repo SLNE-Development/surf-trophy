@@ -122,6 +122,36 @@ fun ownTrophiesMenu(player: TrophyPlayer) {
             }
         })
 
+        val navigationPane = StaticPane(0, height - 1, 7, 1).apply {
+            if (contentPane.page > 1) {
+                addItem(
+                    GuiItem(buildItem(Material.ARROW) {
+                        displayName {
+                            variableValue("Vorherige Seite".toSmallCaps())
+                        }
+                    }) {
+                        contentPane.page -= 1
+                        update()
+                    }, 0, 0
+                )
+            }
+
+            if (contentPane.page < contentPane.pages) {
+                addItem(
+                    GuiItem(buildItem(Material.ARROW) {
+                        displayName {
+                            variableValue("Nächste Seite".toSmallCaps())
+                        }
+                    }) {
+                        contentPane.page += 1
+                        update()
+                    }, 6, 0
+                )
+            }
+        }
+
+        addPane(navigationPane)
+
         setOnClose {
             plugin.launch {
                 trophyPlayerService.savePlayer(player)
