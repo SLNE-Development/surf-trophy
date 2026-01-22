@@ -100,7 +100,7 @@ fun ownTrophiesMenu(player: TrophyPlayer) {
                     player.selectedTrophy = null
                     bukkitPlayer.inventory.setItemInOffHand(player.selectedTrophy?.trophy?.item)
                     bukkitPlayer.sendText {
-                        appendPrefix()
+                        appendSuccessPrefix()
                         success("Du hast die Trophäe ")
                         variableValue(trophy.trophy.name)
                         success(" abgewählt.")
@@ -112,7 +112,7 @@ fun ownTrophiesMenu(player: TrophyPlayer) {
                 bukkitPlayer.inventory.setItemInOffHand(player.selectedTrophy?.trophy?.item)
 
                 bukkitPlayer.sendText {
-                    appendPrefix()
+                    appendSuccessPrefix()
                     success("Du hast die Trophäe ")
                     variableValue(trophy?.trophy?.name ?: "Unbekannt")
                     success(" ausgewählt.")
