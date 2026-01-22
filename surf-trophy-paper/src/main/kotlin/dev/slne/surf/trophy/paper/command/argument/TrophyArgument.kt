@@ -16,7 +16,7 @@ class TrophyArgument(nodeName: String) :
         trophyService.findTrophyByName(input)
             ?: throw CustomArgumentException.fromAdventureComponent(
                 buildText {
-                    appendPrefix()
+                    appendErrorPrefix()
                     error("Die Trophäe '$input' wurde nicht gefunden.")
                 })
     }) {

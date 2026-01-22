@@ -27,7 +27,7 @@ fun trophyCommand() = commandTree("trophy") {
 
         if (trophyPlayer == null) {
             player.sendText {
-                appendPrefix()
+                appendErrorPrefix()
                 error("Deine Daten konnten nicht geladen werden.")
             }
             return@playerExecutor
@@ -47,7 +47,7 @@ fun trophyCommand() = commandTree("trophy") {
                     trophyPlayerService.loadOrGetPlayerByUuid(it)
                 } ?: run {
                     player.sendText {
-                        appendPrefix()
+                        appendErrorPrefix()
                         error("Der Spieler wurde nicht gefunden.")
                     }
                     return@launch
@@ -69,7 +69,7 @@ fun trophyCommand() = commandTree("trophy") {
                     trophyService.refreshTrophies()
 
                     executor.sendText {
-                        appendPrefix()
+                        appendSuccessPrefix()
                         success("Alle Trophäen wurden neu geladen.")
                     }
                 }
@@ -87,7 +87,7 @@ fun trophyCommand() = commandTree("trophy") {
 
                         if (item.isEmpty) {
                             player.sendText {
-                                appendPrefix()
+                                appendErrorPrefix()
                                 error("Du musst ein Item in der Hand halten, um eine Trophäe zu erstellen.")
                             }
                             return@playerExecutor
@@ -105,7 +105,7 @@ fun trophyCommand() = commandTree("trophy") {
                             trophyService.saveTrophy(trophy)
 
                             player.sendText {
-                                appendPrefix()
+                                appendSuccessPrefix()
                                 success("Die Trophäe wurde erstellt.")
                             }
                         }
@@ -123,7 +123,7 @@ fun trophyCommand() = commandTree("trophy") {
                         trophyService.deleteTrophy(trophy)
 
                         player.sendText {
-                            appendPrefix()
+                            appendSuccessPrefix()
                             success("Die Trophäe wurde gelöscht.")
                         }
                     }
@@ -166,7 +166,7 @@ fun trophyCommand() = commandTree("trophy") {
                                 trophyPlayerService.loadOrGetPlayerByUuid(it)
                             } ?: run {
                                 player.sendText {
-                                    appendPrefix()
+                                    appendErrorPrefix()
                                     error("Der Spieler wurde nicht gefunden.")
                                 }
                                 return@launch
@@ -175,7 +175,7 @@ fun trophyCommand() = commandTree("trophy") {
                             trophyPlayerService.giveTrophy(targetPlayer, trophy)
 
                             player.sendText {
-                                appendPrefix()
+                                appendSuccessPrefix()
                                 success("Die Trophäe wurde dem Spieler gegeben.")
                             }
                         }
@@ -196,7 +196,7 @@ fun trophyCommand() = commandTree("trophy") {
                                 trophyPlayerService.loadOrGetPlayerByUuid(it)
                             } ?: run {
                                 player.sendText {
-                                    appendPrefix()
+                                    appendErrorPrefix()
                                     error("Der Spieler wurde nicht gefunden.")
                                 }
                                 return@launch
@@ -205,7 +205,7 @@ fun trophyCommand() = commandTree("trophy") {
                             trophyPlayerService.takeTrophy(targetPlayer, trophy)
 
                             player.sendText {
-                                appendPrefix()
+                                appendSuccessPrefix()
                                 success("Die Trophäe wurde dem Spieler genommen.")
                             }
                         }
