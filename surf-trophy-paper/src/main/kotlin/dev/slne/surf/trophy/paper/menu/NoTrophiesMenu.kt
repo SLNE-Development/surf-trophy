@@ -3,6 +3,7 @@ package dev.slne.surf.trophy.paper.menu
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import dev.slne.surf.surfapi.bukkit.api.builder.buildItem
+import dev.slne.surf.surfapi.bukkit.api.builder.buildLore
 import dev.slne.surf.surfapi.bukkit.api.builder.displayName
 import dev.slne.surf.surfapi.bukkit.api.event.cancel
 import dev.slne.surf.surfapi.bukkit.api.inventory.dsl.menu
@@ -24,7 +25,7 @@ private const val height = 5
 fun noTrophiesMenu(player: Player, viewer: Player) {
     menu(buildText {
         note(
-            "Fehler".toSmallCaps(),
+            "Deine Trophäen".toSmallCaps(),
             TextDecoration.BOLD
         )
     }, height) {
@@ -53,6 +54,58 @@ fun noTrophiesMenu(player: Player, viewer: Player) {
                             "${player.name} hat noch keine Trophäen erhalten!".toSmallCaps(),
                             TextDecoration.BOLD
                         )
+                    }
+                }
+                buildLore {
+                    emptyLine()
+                    line {
+                        spacer("»")
+                        appendSpace()
+                        text("Trophäen sind Zeichen deiner Geschichte auf diesem Server.")
+                    }
+                    line {
+                        spacer("»")
+                        appendSpace()
+                        text("Du erhältst sie durch besondere Leistungen –")
+                    }
+                    line {
+                        spacer("»")
+                        appendSpace()
+                        text("etwa durch die Teilnahme an Events oder deine Abenteuer")
+                    }
+                    line {
+                        spacer("»")
+                        appendSpace()
+                        text("auf unseren Survival-Servern.")
+                    }
+
+                    emptyLine()
+                    line {
+                        spacer("»")
+                        appendSpace()
+                        text("Einige Trophäen sind streng limitiert.")
+                    }
+                    line {
+                        spacer("»")
+                        appendSpace()
+                        text("Bestimmte Auszeichnungen sind exklusiv für Teammitglieder")
+                    }
+                    line {
+                        spacer("»")
+                        appendSpace()
+                        text("oder ausgewählte Persönlichkeiten reserviert.")
+                    }
+
+                    emptyLine()
+                    line {
+                        spacer("»")
+                        appendSpace()
+                        text("Jede Trophäe erzählt ihre eigene Geschichte –")
+                    }
+                    line {
+                        spacer("»")
+                        appendSpace()
+                        text("vielleicht bald auch deine.")
                     }
                 }
             })
