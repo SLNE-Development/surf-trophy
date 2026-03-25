@@ -8,7 +8,7 @@ import dev.jorel.commandapi.arguments.CustomArgument
 import dev.jorel.commandapi.arguments.TextArgument
 import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
 import dev.slne.surf.trophy.api.trophy.Trophy
-import dev.slne.surf.trophy.core.service.trophyService
+import dev.slne.surf.trophy.core.common.service.trophyService
 
 class TrophyArgument(nodeName: String) :
     CustomArgument<Trophy, String>(TextArgument(nodeName), { info ->

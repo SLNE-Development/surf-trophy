@@ -9,8 +9,9 @@ import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
 import dev.slne.surf.surfapi.core.api.messages.adventure.sendText
 import dev.slne.surf.surfapi.core.api.messages.pagination.Pagination
 import dev.slne.surf.trophy.api.trophy.Trophy
-import dev.slne.surf.trophy.core.service.trophyPlayerService
-import dev.slne.surf.trophy.core.service.trophyService
+import dev.slne.surf.trophy.core.common.service.trophyPlayerService
+import dev.slne.surf.trophy.core.common.service.trophyService
+import dev.slne.surf.trophy.core.paper.util.itemStackToString
 import dev.slne.surf.trophy.paper.command.argument.trophyArgument
 import dev.slne.surf.trophy.paper.menu.otherTrophiesMenu
 import dev.slne.surf.trophy.paper.menu.ownTrophiesMenu
@@ -98,7 +99,7 @@ fun trophyCommand() = commandTree("trophy") {
                                 UUID.randomUUID(),
                                 name,
                                 description,
-                                item
+                                itemStackToString(item)
                             )
 
                             trophyService.cacheTrophy(trophy)

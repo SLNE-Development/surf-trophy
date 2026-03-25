@@ -13,6 +13,7 @@ import dev.slne.surf.surfapi.core.api.font.toSmallCaps
 import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
 import dev.slne.surf.surfapi.core.api.util.dateTimeFormatter
 import dev.slne.surf.trophy.api.player.TrophyPlayer
+import dev.slne.surf.trophy.core.paper.util.item
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.Material

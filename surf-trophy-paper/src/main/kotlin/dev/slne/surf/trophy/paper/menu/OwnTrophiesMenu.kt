@@ -16,7 +16,8 @@ import dev.slne.surf.surfapi.core.api.messages.adventure.sendText
 import dev.slne.surf.surfapi.core.api.util.dateTimeFormatter
 import dev.slne.surf.trophy.api.player.TrophyPlayer
 import dev.slne.surf.trophy.api.trophy.ReceivedTrophy
-import dev.slne.surf.trophy.core.service.trophyPlayerService
+import dev.slne.surf.trophy.core.common.service.trophyPlayerService
+import dev.slne.surf.trophy.core.paper.util.item
 import dev.slne.surf.trophy.paper.plugin
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
