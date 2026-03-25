@@ -1,12 +1,13 @@
 package dev.slne.surf.trophy.api.player
 
+import dev.slne.surf.surfapi.core.api.serializer.java.uuid.SerializableUUID
 import dev.slne.surf.trophy.api.trophy.ReceivedTrophy
-import it.unimi.dsi.fastutil.objects.ObjectList
-import java.util.*
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class TrophyPlayer(
-    val uuid: UUID,
+    val uuid: SerializableUUID,
     val name: String,
-    val trophies: ObjectList<ReceivedTrophy>,
+    val trophies: MutableList<ReceivedTrophy>,
     var selectedTrophy: ReceivedTrophy?
 )

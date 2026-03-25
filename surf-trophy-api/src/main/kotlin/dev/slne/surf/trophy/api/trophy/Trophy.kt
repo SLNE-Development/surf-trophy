@@ -1,11 +1,12 @@
 package dev.slne.surf.trophy.api.trophy
 
-import org.bukkit.inventory.ItemStack
-import java.util.*
+import dev.slne.surf.surfapi.core.api.serializer.java.uuid.SerializableUUID
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Trophy(
-    val uuid: UUID,
+    val uuid: SerializableUUID,
     val name: String,
     val description: String,
-    val item: ItemStack
+    val itemString: String
 )

@@ -5,7 +5,8 @@ import dev.slne.surf.surfapi.bukkit.api.builder.buildLore
 import dev.slne.surf.surfapi.bukkit.api.builder.displayName
 import dev.slne.surf.surfapi.core.api.font.toSmallCaps
 import dev.slne.surf.surfapi.core.api.util.dateTimeFormatter
-import dev.slne.surf.trophy.core.service.trophyPlayerService
+import dev.slne.surf.trophy.core.common.service.trophyPlayerService
+import dev.slne.surf.trophy.core.paper.util.item
 import dev.slne.surf.trophy.paper.plugin
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
