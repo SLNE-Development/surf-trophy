@@ -5,4 +5,4 @@ import dev.slne.surf.trophy.core.common.rabbit.packet.response.ManyTrophyRespons
 import kotlinx.serialization.Serializable
 
 @Serializable
-object LoadTrophiesRequestPacket : RabbitRequestPacket<ManyTrophyResponsePacket>()
+class LoadTrophiesRequestPacket : RabbitRequestPacket<ManyTrophyResponsePacket>()

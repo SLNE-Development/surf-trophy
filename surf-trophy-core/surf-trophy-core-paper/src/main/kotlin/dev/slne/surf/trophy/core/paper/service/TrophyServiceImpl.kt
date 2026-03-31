@@ -53,6 +53,6 @@ class TrophyServiceImpl : TrophyService, Services.Fallback {
     }
 
     override suspend fun loadTrophies() = PaperTrophyInstance.rabbitApi.sendRequest(
-        LoadTrophiesRequestPacket
+        LoadTrophiesRequestPacket()
     ).trophies
 }
