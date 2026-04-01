@@ -5,7 +5,7 @@ import dev.slne.surf.surfapi.bukkit.api.builder.buildLore
 import dev.slne.surf.surfapi.bukkit.api.builder.displayName
 import dev.slne.surf.surfapi.core.api.font.toSmallCaps
 import dev.slne.surf.surfapi.core.api.util.dateTimeFormatter
-import dev.slne.surf.trophy.core.common.service.trophyPlayerService
+import dev.slne.surf.trophy.core.common.service.PlayerTrophyService
 import dev.slne.surf.trophy.core.paper.util.item
 import dev.slne.surf.trophy.paper.plugin
 import org.bukkit.event.EventHandler
@@ -20,11 +20,11 @@ object PlayerConnectionListener : Listener {
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
         plugin.launch {
-            val player = trophyPlayerService.loadOrGetOrCreatePlayerByUuidAndName(
+            val player = PlayerTrophyService.loadOrGetOrCreatePlayerByUuidAndName(
                 event.player.uniqueId,
                 event.player.name
             )
-            trophyPlayerService.cachePlayer(player)
+            PlayerTrophyService.cachePlayer(player)
 
             player.selectedTrophy?.let {
                 event.player.inventory.setItemInOffHand(it.trophy.item.apply {
@@ -66,6 +66,6 @@ object PlayerConnectionListener : Listener {
 
     @EventHandler
     fun onQuit(event: PlayerQuitEvent) {
-        trophyPlayerService.invalidatePlayer(event.player.uniqueId)
+        PlayerTrophyService.invalidatePlayer(event.player.uniqueId)
     }
 }

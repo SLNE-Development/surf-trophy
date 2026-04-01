@@ -16,7 +16,7 @@ import dev.slne.surf.surfapi.core.api.messages.adventure.sendText
 import dev.slne.surf.surfapi.core.api.util.dateTimeFormatter
 import dev.slne.surf.trophy.api.player.TrophyPlayer
 import dev.slne.surf.trophy.api.trophy.ReceivedTrophy
-import dev.slne.surf.trophy.core.common.service.trophyPlayerService
+import dev.slne.surf.trophy.core.common.service.PlayerTrophyService
 import dev.slne.surf.trophy.core.paper.util.item
 import dev.slne.surf.trophy.paper.plugin
 import net.kyori.adventure.text.format.TextDecoration
@@ -155,7 +155,7 @@ fun ownTrophiesMenu(player: TrophyPlayer) {
 
         setOnClose {
             plugin.launch {
-                trophyPlayerService.savePlayer(player)
+                PlayerTrophyService.savePlayer(player)
             }
         }
 
@@ -172,7 +172,7 @@ private fun getTrophyByItem(itemStack: ItemStack?, player: Player): ReceivedTrop
         return null
     }
     val name = itemStack.displayName().plain().replace("[", "").replace("]", "")
-    val trophyPlayer = trophyPlayerService.findPlayerByUuid(player.uniqueId) ?: return null
+    val trophyPlayer = PlayerTrophyService.findPlayerByUuid(player.uniqueId) ?: return null
     val trophy = trophyPlayer.trophies.find { it.trophy.name == name }
 
     return trophy

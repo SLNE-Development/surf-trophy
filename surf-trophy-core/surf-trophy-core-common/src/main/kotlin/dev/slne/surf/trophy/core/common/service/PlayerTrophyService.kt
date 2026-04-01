@@ -5,9 +5,9 @@ import dev.slne.surf.trophy.api.player.TrophyPlayer
 import dev.slne.surf.trophy.api.trophy.Trophy
 import java.util.*
 
-val trophyPlayerService = requiredService<TrophyPlayerService>()
+private val service = requiredService<PlayerTrophyService>()
 
-interface TrophyPlayerService {
+interface PlayerTrophyService {
     fun findPlayerByUuid(uuid: UUID): TrophyPlayer?
     fun findPlayerByName(name: String): TrophyPlayer?
 
@@ -25,4 +25,8 @@ interface TrophyPlayerService {
     suspend fun loadOrGetOrCreatePlayerByUuidAndName(uuid: UUID, name: String): TrophyPlayer
 
     suspend fun savePlayer(trophyPlayer: TrophyPlayer): TrophyPlayer
+
+    companion object : PlayerTrophyService by service {
+        val INSTANCE get() = service
+    }
 }

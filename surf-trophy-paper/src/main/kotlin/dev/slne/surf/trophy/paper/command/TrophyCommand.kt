@@ -9,8 +9,8 @@ import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
 import dev.slne.surf.surfapi.core.api.messages.adventure.sendText
 import dev.slne.surf.surfapi.core.api.messages.pagination.Pagination
 import dev.slne.surf.trophy.api.trophy.Trophy
-import dev.slne.surf.trophy.core.common.service.trophyPlayerService
-import dev.slne.surf.trophy.core.common.service.trophyService
+import dev.slne.surf.trophy.core.common.service.PlayerTrophyService
+import dev.slne.surf.trophy.core.common.service.TrophyService
 import dev.slne.surf.trophy.core.paper.util.itemStackToString
 import dev.slne.surf.trophy.paper.command.argument.trophyArgument
 import dev.slne.surf.trophy.paper.menu.otherTrophiesMenu
@@ -24,7 +24,7 @@ import java.util.*
 fun trophyCommand() = commandTree("trophy") {
     withPermission(PermissionRegistry.COMMAND_TROPHY)
     playerExecutor { player, _ ->
-        val trophyPlayer = trophyPlayerService.findPlayerByUuid(player.uniqueId)
+        val trophyPlayer = PlayerTrophyService.findPlayerByUuid(player.uniqueId)
 
         if (trophyPlayer == null) {
             player.sendText {
@@ -45,7 +45,7 @@ fun trophyCommand() = commandTree("trophy") {
 
             plugin.launch {
                 val targetPlayer = target.await()?.uuid?.let {
-                    trophyPlayerService.loadOrGetPlayerByUuid(it)
+                    PlayerTrophyService.loadOrGetPlayerByUuid(it)
                 } ?: run {
                     player.sendText {
                         appendErrorPrefix()
@@ -67,7 +67,7 @@ fun trophyCommand() = commandTree("trophy") {
 
             anyExecutor { executor, _ ->
                 plugin.launch {
-                    trophyService.refreshTrophies()
+                    TrophyService.refreshTrophies()
 
                     executor.sendText {
                         appendSuccessPrefix()
@@ -102,8 +102,8 @@ fun trophyCommand() = commandTree("trophy") {
                                 itemStackToString(item)
                             )
 
-                            trophyService.cacheTrophy(trophy)
-                            trophyService.saveTrophy(trophy)
+                            TrophyService.cacheTrophy(trophy)
+                            TrophyService.saveTrophy(trophy)
 
                             player.sendText {
                                 appendSuccessPrefix()
@@ -121,7 +121,7 @@ fun trophyCommand() = commandTree("trophy") {
                     val trophy: Trophy by args
 
                     plugin.launch {
-                        trophyService.deleteTrophy(trophy)
+                        TrophyService.deleteTrophy(trophy)
 
                         player.sendText {
                             appendSuccessPrefix()
@@ -150,7 +150,7 @@ fun trophyCommand() = commandTree("trophy") {
 
                 executor.sendText {
                     appendNewline()
-                    append(pagination.renderComponent(trophyService.getTrophies()))
+                    append(pagination.renderComponent(TrophyService.getTrophies()))
                 }
             }
         }
@@ -164,7 +164,7 @@ fun trophyCommand() = commandTree("trophy") {
 
                         plugin.launch {
                             val targetPlayer = target.await()?.uuid?.let {
-                                trophyPlayerService.loadOrGetPlayerByUuid(it)
+                                PlayerTrophyService.loadOrGetPlayerByUuid(it)
                             } ?: run {
                                 player.sendText {
                                     appendErrorPrefix()
@@ -173,7 +173,7 @@ fun trophyCommand() = commandTree("trophy") {
                                 return@launch
                             }
 
-                            trophyPlayerService.giveTrophy(targetPlayer, trophy)
+                            PlayerTrophyService.giveTrophy(targetPlayer, trophy)
 
                             player.sendText {
                                 appendSuccessPrefix()
@@ -194,7 +194,7 @@ fun trophyCommand() = commandTree("trophy") {
 
                         plugin.launch {
                             val targetPlayer = target.await()?.uuid?.let {
-                                trophyPlayerService.loadOrGetPlayerByUuid(it)
+                                PlayerTrophyService.loadOrGetPlayerByUuid(it)
                             } ?: run {
                                 player.sendText {
                                     appendErrorPrefix()
@@ -203,7 +203,7 @@ fun trophyCommand() = commandTree("trophy") {
                                 return@launch
                             }
 
-                            trophyPlayerService.takeTrophy(targetPlayer, trophy)
+                            PlayerTrophyService.takeTrophy(targetPlayer, trophy)
 
                             player.sendText {
                                 appendSuccessPrefix()

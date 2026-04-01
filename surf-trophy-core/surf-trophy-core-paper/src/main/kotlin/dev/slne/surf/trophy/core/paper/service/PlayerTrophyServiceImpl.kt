@@ -10,14 +10,13 @@ import dev.slne.surf.trophy.core.common.rabbit.packet.request.player.GiveTrophyR
 import dev.slne.surf.trophy.core.common.rabbit.packet.request.player.LoadTrophyPlayerRequestPacket
 import dev.slne.surf.trophy.core.common.rabbit.packet.request.player.SaveTrophyPlayerRequestPacket
 import dev.slne.surf.trophy.core.common.rabbit.packet.request.player.TakeTrophyRequestPacket
-import dev.slne.surf.trophy.core.common.service.TrophyPlayerService
-import dev.slne.surf.trophy.core.common.service.trophyPlayerService
+import dev.slne.surf.trophy.core.common.service.PlayerTrophyService
 import dev.slne.surf.trophy.core.paper.PaperTrophyInstance
 import net.kyori.adventure.util.Services
 import java.util.*
 
-@AutoService(TrophyPlayerService::class)
-class TrophyPlayerServiceImpl : TrophyPlayerService, Services.Fallback {
+@AutoService(PlayerTrophyService::class)
+class PlayerTrophyServiceImpl : PlayerTrophyService, Services.Fallback {
     private val _players = mutableObject2ObjectMapOf<UUID, TrophyPlayer>()
 
     override fun findPlayerByUuid(uuid: UUID) = _players[uuid]
@@ -58,7 +57,7 @@ class TrophyPlayerServiceImpl : TrophyPlayerService, Services.Fallback {
         val receiveTrophy = ReceivedTrophy(trophy, System.currentTimeMillis())
         player.trophies.add(receiveTrophy)
 
-        trophyPlayerService.cachePlayer(player)
+        PlayerTrophyService.cachePlayer(player)
 
         return PaperTrophyInstance.paperLoader.rabbitApi.sendRequest(
             GiveTrophyRequestPacket(
@@ -74,7 +73,7 @@ class TrophyPlayerServiceImpl : TrophyPlayerService, Services.Fallback {
     ): Boolean {
         player.trophies.removeIf { it.trophy.uuid == trophy.uuid }
 
-        trophyPlayerService.cachePlayer(player)
+        PlayerTrophyService.cachePlayer(player)
         return PaperTrophyInstance.paperLoader.rabbitApi.sendRequest(
             TakeTrophyRequestPacket(
                 player.uuid,

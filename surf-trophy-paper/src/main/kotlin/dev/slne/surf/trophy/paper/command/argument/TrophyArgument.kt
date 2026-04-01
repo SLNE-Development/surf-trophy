@@ -8,12 +8,12 @@ import dev.jorel.commandapi.arguments.CustomArgument
 import dev.jorel.commandapi.arguments.TextArgument
 import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
 import dev.slne.surf.trophy.api.trophy.Trophy
-import dev.slne.surf.trophy.core.common.service.trophyService
+import dev.slne.surf.trophy.core.common.service.TrophyService
 
 class TrophyArgument(nodeName: String) :
     CustomArgument<Trophy, String>(TextArgument(nodeName), { info ->
         val input = info.input.replace("\"", "")
-        trophyService.findTrophyByName(input)
+        TrophyService.findTrophyByName(input)
             ?: throw CustomArgumentException.fromAdventureComponent(
                 buildText {
                     appendErrorPrefix()
@@ -23,7 +23,7 @@ class TrophyArgument(nodeName: String) :
     init {
         this.replaceSuggestions(
             ArgumentSuggestions.stringCollection {
-                trophyService.getTrophies().map { "\"${it.name}\"" }
+                TrophyService.getTrophies().map { "\"${it.name}\"" }
             }
         )
     }

@@ -11,9 +11,7 @@ import dev.slne.surf.trophy.microservice.table.TrophiesTable
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 
-val trophyRepository = TrophyRepository()
-
-class TrophyRepository {
+object TrophyRepository {
     suspend fun loadTrophies(): List<Trophy> = suspendTransaction {
         TrophiesTable
             .selectAll()

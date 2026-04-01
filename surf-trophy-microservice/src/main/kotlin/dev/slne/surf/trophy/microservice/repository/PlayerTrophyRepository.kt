@@ -20,10 +20,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import java.util.*
 
-val trophyPlayerRepository = TrophyPlayerRepository()
-
-class TrophyPlayerRepository {
-
+object PlayerTrophyRepository {
     suspend fun loadPlayerByUuid(uuid: UUID, name: String): TrophyPlayer = suspendTransaction {
         createPlayer(
             uuid, name,
@@ -43,7 +40,7 @@ class TrophyPlayerRepository {
             val trophyId = trophyRow[TrophiesTable.id].value
 
             PlayerTrophiesTable.insert {
-                it[this.playerUuid] = playerUuid.uuid
+                it[this.playerUuid] = playerUuid
                 it[this.trophyId] = trophyId
                 it[this.receivedAt] = trophy.receivedAt
             }
@@ -104,7 +101,7 @@ class TrophyPlayerRepository {
                 .selectAll()
                 .where(PlayerTrophiesTable.playerUuid eq playerUuid)
                 .map { row ->
-                    val trophy = trophyRepository.createTrophyFromRow(row)
+                    val trophy = TrophyRepository.createTrophyFromRow(row)
                     createReceivedTrophyFromRow(row, trophy)
                 }.toList().toMutableList()
         }
@@ -118,7 +115,7 @@ class TrophyPlayerRepository {
 
             val trophy = TrophiesTable.selectAll().where(TrophiesTable.id eq trophyId).firstOrNull()
                 ?.let { trophyRow ->
-                    trophyRepository.createTrophyFromRow(trophyRow)
+                    TrophyRepository.createTrophyFromRow(trophyRow)
                 } ?: return@suspendTransaction null
 
             (PlayerTrophiesTable innerJoin TrophiesTable)

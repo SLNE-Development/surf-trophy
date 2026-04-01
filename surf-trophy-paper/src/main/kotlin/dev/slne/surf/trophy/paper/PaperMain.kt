@@ -2,7 +2,7 @@ package dev.slne.surf.trophy.paper
 
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.slne.surf.surfapi.bukkit.api.event.register
-import dev.slne.surf.trophy.core.common.service.trophyService
+import dev.slne.surf.trophy.core.common.service.TrophyService
 import dev.slne.surf.trophy.core.paper.PaperTrophyInstance
 import dev.slne.surf.trophy.paper.command.trophyCommand
 import dev.slne.surf.trophy.paper.listener.PlayerConnectionListener
@@ -21,7 +21,7 @@ class PaperMain : SuspendingJavaPlugin() {
         PlayerConnectionListener.register()
         trophyCommand()
 
-        trophyService.refreshTrophies()
+        TrophyService.refreshTrophies()
     }
 
     override suspend fun onDisableAsync() {
