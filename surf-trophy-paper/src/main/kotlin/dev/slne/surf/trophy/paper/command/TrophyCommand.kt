@@ -121,11 +121,16 @@ fun trophyCommand() = commandTree("trophy") {
                     val trophy: Trophy by args
 
                     plugin.launch {
-                        TrophyService.deleteTrophy(trophy)
-
-                        player.sendText {
-                            appendSuccessPrefix()
-                            success("Die Trophäe wurde gelöscht.")
+                        if (TrophyService.deleteTrophy(trophy)) {
+                            player.sendText {
+                                appendSuccessPrefix()
+                                success("Die Trophäe wurde gelöscht.")
+                            }
+                        } else {
+                            player.sendText {
+                                appendErrorPrefix()
+                                error("Die Trophäe wurde nicht gefunden.")
+                            }
                         }
                     }
                 }
@@ -173,11 +178,16 @@ fun trophyCommand() = commandTree("trophy") {
                                 return@launch
                             }
 
-                            PlayerTrophyService.giveTrophy(targetPlayer, trophy)
-
-                            player.sendText {
-                                appendSuccessPrefix()
-                                success("Die Trophäe wurde dem Spieler gegeben.")
+                            if (PlayerTrophyService.giveTrophy(targetPlayer, trophy)) {
+                                player.sendText {
+                                    appendSuccessPrefix()
+                                    success("Die Trophäe wurde dem Spieler gegeben.")
+                                }
+                            } else {
+                                player.sendText {
+                                    appendErrorPrefix()
+                                    error("Der Spieler besitzt die Trophäe bereits.")
+                                }
                             }
                         }
                     }
@@ -203,11 +213,16 @@ fun trophyCommand() = commandTree("trophy") {
                                 return@launch
                             }
 
-                            PlayerTrophyService.takeTrophy(targetPlayer, trophy)
-
-                            player.sendText {
-                                appendSuccessPrefix()
-                                success("Die Trophäe wurde dem Spieler genommen.")
+                            if (PlayerTrophyService.takeTrophy(targetPlayer, trophy)) {
+                                player.sendText {
+                                    appendSuccessPrefix()
+                                    success("Die Trophäe wurde dem Spieler genommen.")
+                                }
+                            } else {
+                                player.sendText {
+                                    appendErrorPrefix()
+                                    error("Der Spieler besitzt die Trophäe nicht.")
+                                }
                             }
                         }
                     }
