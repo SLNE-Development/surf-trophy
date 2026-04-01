@@ -115,7 +115,7 @@ fun ownTrophiesMenu(player: TrophyPlayer) {
                 bukkitPlayer.sendText {
                     appendSuccessPrefix()
                     success("Du hast die Trophäe ")
-                    variableValue(trophy.trophy?.name ?: "Unbekannt")
+                    variableValue(trophy.trophy.name)
                     success(" ausgewählt.")
                 }
 
