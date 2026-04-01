@@ -118,5 +118,5 @@ fun noTrophiesMenu(player: Player, viewer: Player) {
 
         setOnGlobalDrag { it.cancel() }
         setOnGlobalClick { it.cancel() }
-    }.show(player ?: error("Player is null"))
+    }.show(player)
 }
