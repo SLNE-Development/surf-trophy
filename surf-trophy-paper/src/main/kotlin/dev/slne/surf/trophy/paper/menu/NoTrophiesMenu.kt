@@ -61,51 +61,51 @@ fun noTrophiesMenu(player: Player, viewer: Player) {
                     line {
                         spacer("»")
                         appendSpace()
-                        text("Trophäen sind Zeichen deiner Geschichte auf diesem Server.")
+                        info("Trophäen sind Zeichen deiner Geschichte auf diesem Server.")
                     }
                     line {
                         spacer("»")
                         appendSpace()
-                        text("Du erhältst sie durch besondere Leistungen –")
+                        info("Du erhältst sie durch besondere Leistungen –")
                     }
                     line {
                         spacer("»")
                         appendSpace()
-                        text("etwa durch die Teilnahme an Events oder deine Abenteuer")
+                        info("etwa durch die Teilnahme an Events oder deine Abenteuer")
                     }
                     line {
                         spacer("»")
                         appendSpace()
-                        text("auf unseren Survival-Servern.")
-                    }
-
-                    emptyLine()
-                    line {
-                        spacer("»")
-                        appendSpace()
-                        text("Einige Trophäen sind streng limitiert.")
-                    }
-                    line {
-                        spacer("»")
-                        appendSpace()
-                        text("Bestimmte Auszeichnungen sind exklusiv für Teammitglieder")
-                    }
-                    line {
-                        spacer("»")
-                        appendSpace()
-                        text("oder ausgewählte Persönlichkeiten reserviert.")
+                        info("auf unseren Survival-Servern.")
                     }
 
                     emptyLine()
                     line {
                         spacer("»")
                         appendSpace()
-                        text("Jede Trophäe erzählt ihre eigene Geschichte –")
+                        info("Einige Trophäen sind streng limitiert.")
                     }
                     line {
                         spacer("»")
                         appendSpace()
-                        text("vielleicht bald auch deine.")
+                        info("Bestimmte Auszeichnungen sind exklusiv für Teammitglieder")
+                    }
+                    line {
+                        spacer("»")
+                        appendSpace()
+                        info("oder ausgewählte Persönlichkeiten reserviert.")
+                    }
+
+                    emptyLine()
+                    line {
+                        spacer("»")
+                        appendSpace()
+                        info("Jede Trophäe erzählt ihre eigene Geschichte –")
+                    }
+                    line {
+                        spacer("»")
+                        appendSpace()
+                        info("vielleicht bald auch deine.")
                     }
                 }
             })
