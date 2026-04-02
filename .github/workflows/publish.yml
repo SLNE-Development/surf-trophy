@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - 'version/*'
-      - 'feat/microservice'
+      - 'feat/microservce'
   workflow_dispatch:
 
 env:
