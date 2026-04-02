@@ -1,6 +1,7 @@
 package dev.slne.surf.trophy.microservice.rabbit.handler
 
 import dev.slne.surf.rabbitmq.api.handler.RabbitHandler
+import dev.slne.surf.rabbitmq.api.packet.standard.response.primitive.PrimitiveResponse
 import dev.slne.surf.trophy.core.common.rabbit.packet.request.trophy.DeleteTrophyRequestPacket
 import dev.slne.surf.trophy.core.common.rabbit.packet.request.trophy.LoadTrophiesRequestPacket
 import dev.slne.surf.trophy.core.common.rabbit.packet.request.trophy.SaveTrophyRequestPacket
@@ -16,11 +17,11 @@ object TrophiesHandler {
 
     @RabbitHandler
     fun onSaveTrophyPacket(packet: SaveTrophyRequestPacket) = packet.launch {
-        TrophyRepository.saveTrophy(packet.trophy)
+        packet.respond(PrimitiveResponse.BooleanResponsePacket(TrophyRepository.saveTrophy(packet.trophy)))
     }
 
     @RabbitHandler
     fun onDeleteTrophyPacket(packet: DeleteTrophyRequestPacket) = packet.launch {
-        TrophyRepository.deleteTrophy(packet.trophy)
+        packet.respond(PrimitiveResponse.BooleanResponsePacket(TrophyRepository.deleteTrophy(packet.trophy)))
     }
 }

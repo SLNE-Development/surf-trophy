@@ -26,14 +26,13 @@ object TrophyRepository {
             it[item] = trophy.itemString
         }
 
-        Unit
+        true
     }
 
     suspend fun deleteTrophy(trophy: Trophy) = suspendTransaction {
         TrophiesTable.deleteWhere {
             TrophiesTable.uuid eq trophy.uuid
-        }
-        Unit
+        } > 0
     }
 
     fun createTrophyFromRow(row: ResultRow): Trophy =
