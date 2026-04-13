@@ -1,7 +1,7 @@
 package dev.slne.surf.trophy.paper
 
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
-import dev.slne.surf.surfapi.bukkit.api.event.register
+import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.trophy.core.common.service.TrophyService
 import dev.slne.surf.trophy.core.paper.PaperTrophyInstance
 import dev.slne.surf.trophy.paper.command.trophyCommand

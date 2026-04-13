@@ -9,7 +9,6 @@ class PaperLoader(
     val rabbitApi = ClientRabbitMQApi.create("surf-trophy", dataPath)
 
     suspend fun onLoad() {
-        // Rabbit
         rabbitApi.freezeAndConnect()
     }
 

@@ -6,7 +6,7 @@ import dev.jorel.commandapi.arguments.Argument
 import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.jorel.commandapi.arguments.CustomArgument
 import dev.jorel.commandapi.arguments.TextArgument
-import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
+import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.trophy.api.trophy.Trophy
 import dev.slne.surf.trophy.core.common.service.TrophyService
 

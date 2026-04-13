@@ -1,10 +1,10 @@
 package dev.slne.surf.trophy.paper.listener
 
 import com.github.shynixn.mccoroutine.folia.launch
-import dev.slne.surf.surfapi.bukkit.api.builder.buildLore
-import dev.slne.surf.surfapi.bukkit.api.builder.displayName
-import dev.slne.surf.surfapi.core.api.font.toSmallCaps
-import dev.slne.surf.surfapi.core.api.util.dateTimeFormatter
+import dev.slne.surf.api.core.font.toSmallCaps
+import dev.slne.surf.api.core.util.dateTimeFormatter
+import dev.slne.surf.api.paper.builder.buildLore
+import dev.slne.surf.api.paper.builder.displayName
 import dev.slne.surf.trophy.core.common.service.PlayerTrophyService
 import dev.slne.surf.trophy.core.paper.util.item
 import dev.slne.surf.trophy.paper.plugin
@@ -27,7 +27,7 @@ object PlayerConnectionListener : Listener {
             PlayerTrophyService.cachePlayer(player)
 
             player.selectedTrophy?.let {
-                event.player.inventory.setItemInOffHand(it.trophy.item.apply {
+                event.player.inventory.setItemInOffHand(it.trophy.item.clone().apply {
                     displayName {
                         variableValue(it.trophy.name)
                     }

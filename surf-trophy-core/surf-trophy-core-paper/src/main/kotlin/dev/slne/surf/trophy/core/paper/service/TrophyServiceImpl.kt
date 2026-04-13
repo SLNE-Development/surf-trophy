@@ -1,9 +1,9 @@
 package dev.slne.surf.trophy.core.paper.service
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.surfapi.core.api.util.logger
-import dev.slne.surf.surfapi.core.api.util.mutableObjectSetOf
-import dev.slne.surf.surfapi.core.api.util.toObjectSet
+import dev.slne.surf.api.core.util.logger
+import dev.slne.surf.api.core.util.mutableObjectSetOf
+import dev.slne.surf.api.core.util.toObjectSet
 import dev.slne.surf.trophy.api.trophy.Trophy
 import dev.slne.surf.trophy.core.common.rabbit.packet.request.trophy.DeleteTrophyRequestPacket
 import dev.slne.surf.trophy.core.common.rabbit.packet.request.trophy.LoadTrophiesRequestPacket

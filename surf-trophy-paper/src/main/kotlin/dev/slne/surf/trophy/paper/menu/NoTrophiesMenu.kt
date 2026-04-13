@@ -1,122 +1,57 @@
 package dev.slne.surf.trophy.paper.menu
 
-import com.github.stefvanschie.inventoryframework.gui.GuiItem
-import com.github.stefvanschie.inventoryframework.pane.StaticPane
-import dev.slne.surf.surfapi.bukkit.api.builder.buildItem
-import dev.slne.surf.surfapi.bukkit.api.builder.buildLore
-import dev.slne.surf.surfapi.bukkit.api.builder.displayName
-import dev.slne.surf.surfapi.bukkit.api.event.cancel
-import dev.slne.surf.surfapi.bukkit.api.inventory.dsl.menu
-import dev.slne.surf.surfapi.core.api.font.toSmallCaps
-import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
+import dev.slne.surf.api.core.font.toSmallCaps
+import dev.slne.surf.api.paper.builder.buildItem
+import dev.slne.surf.api.paper.builder.buildLore
+import dev.slne.surf.api.paper.builder.displayName
+import dev.slne.surf.api.paper.inventory.framework.dsl.slot
+import dev.slne.surf.api.paper.inventory.framework.view.AbstractSurfView
+import dev.slne.surf.api.paper.inventory.framework.view.onFirstRender
+import dev.slne.surf.api.paper.inventory.framework.view.settings
+import dev.slne.surf.api.paper.inventory.framework.view.surfView
+import dev.slne.surf.trophy.api.player.TrophyPlayer
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Material
 import org.bukkit.entity.Player
 
-private val borderItem = GuiItem(buildItem(Material.GRAY_STAINED_GLASS_PANE) {
-    displayName {
-        text(" ")
+fun noTrophiesMenu(target: TrophyPlayer, viewer: Player): AbstractSurfView =
+    surfView("Deine Trophäen") {
+        settings {
+            rows(5)
+            cancelAllInteractions()
+        }
+
+        onFirstRender {
+            slot(4, 2) {
+                withItem(buildItem(Material.BARRIER) {
+                    displayName {
+                        if (target.uuid == viewer.uniqueId) {
+                            error(
+                                "Du hast noch keine Trophäen erhalten!".toSmallCaps(),
+                                TextDecoration.BOLD
+                            )
+                        } else {
+                            error(
+                                "${target.name} hat noch keine Trophäen erhalten!".toSmallCaps(),
+                                TextDecoration.BOLD
+                            )
+                        }
+                    }
+
+                    buildLore {
+                        emptyLine()
+                        line { spacer("»"); appendSpace(); info("Trophäen sind Zeichen deiner Geschichte auf diesem Server.") }
+                        line { spacer("»"); appendSpace(); info("Du erhältst sie durch besondere Leistungen –") }
+                        line { spacer("»"); appendSpace(); info("etwa durch Events oder Abenteuer.") }
+
+                        emptyLine()
+                        line { spacer("»"); appendSpace(); info("Einige Trophäen sind streng limitiert.") }
+                        line { spacer("»"); appendSpace(); info("Manche sind exklusiv für besondere Spieler.") }
+
+                        emptyLine()
+                        line { spacer("»"); appendSpace(); info("Jede Trophäe erzählt eine Geschichte.") }
+                    }
+                })
+            }
+        }
     }
-})
-
-private const val width = 9
-private const val height = 5
-
-fun noTrophiesMenu(player: Player, viewer: Player) {
-    menu(buildText {
-        note(
-            "Deine Trophäen".toSmallCaps(),
-            TextDecoration.BOLD
-        )
-    }, height) {
-        val outlinePane = StaticPane(0, 0, width, height).apply {
-            for (y in 1 until height - 1) {
-                addItem(borderItem, 0, y)
-                addItem(borderItem, width - 1, y)
-            }
-
-            for (x in 0 until width) {
-                addItem(borderItem, x, 0)
-                addItem(borderItem, x, height - 1)
-            }
-        }
-
-        val errorPane = StaticPane(4, 2, 1, 1).apply {
-            val errorItem = GuiItem(buildItem(Material.BARRIER) {
-                displayName {
-                    if (player.uniqueId == viewer.uniqueId) {
-                        error(
-                            "Du hast noch keine Trophäen erhalten!".toSmallCaps(),
-                            TextDecoration.BOLD
-                        )
-                    } else {
-                        error(
-                            "${player.name} hat noch keine Trophäen erhalten!".toSmallCaps(),
-                            TextDecoration.BOLD
-                        )
-                    }
-                }
-                buildLore {
-                    emptyLine()
-                    line {
-                        spacer("»")
-                        appendSpace()
-                        info("Trophäen sind Zeichen deiner Geschichte auf diesem Server.")
-                    }
-                    line {
-                        spacer("»")
-                        appendSpace()
-                        info("Du erhältst sie durch besondere Leistungen –")
-                    }
-                    line {
-                        spacer("»")
-                        appendSpace()
-                        info("etwa durch die Teilnahme an Events oder deine Abenteuer")
-                    }
-                    line {
-                        spacer("»")
-                        appendSpace()
-                        info("auf unseren Survival-Servern.")
-                    }
-
-                    emptyLine()
-                    line {
-                        spacer("»")
-                        appendSpace()
-                        info("Einige Trophäen sind streng limitiert.")
-                    }
-                    line {
-                        spacer("»")
-                        appendSpace()
-                        info("Bestimmte Auszeichnungen sind exklusiv für Teammitglieder")
-                    }
-                    line {
-                        spacer("»")
-                        appendSpace()
-                        info("oder ausgewählte Persönlichkeiten reserviert.")
-                    }
-
-                    emptyLine()
-                    line {
-                        spacer("»")
-                        appendSpace()
-                        info("Jede Trophäe erzählt ihre eigene Geschichte –")
-                    }
-                    line {
-                        spacer("»")
-                        appendSpace()
-                        info("vielleicht bald auch deine.")
-                    }
-                }
-            })
-
-            addItem(errorItem, 0, 0)
-        }
-
-        addPane(outlinePane)
-        addPane(errorPane)
-
-        setOnGlobalDrag { it.cancel() }
-        setOnGlobalClick { it.cancel() }
-    }.show(player)
-}

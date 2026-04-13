@@ -1,6 +1,6 @@
 package dev.slne.surf.trophy.core.common.service
 
-import dev.slne.surf.surfapi.core.api.util.requiredService
+import dev.slne.surf.api.core.util.requiredService
 import dev.slne.surf.trophy.api.trophy.Trophy
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import java.util.*

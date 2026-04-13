@@ -1,8 +1,8 @@
 package dev.slne.surf.trophy.core.paper.service
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.surfapi.core.api.service.PlayerLookupService
-import dev.slne.surf.surfapi.core.api.util.mutableObject2ObjectMapOf
+import dev.slne.surf.api.core.service.PlayerLookupService
+import dev.slne.surf.api.core.util.mutableObject2ObjectMapOf
 import dev.slne.surf.trophy.api.player.TrophyPlayer
 import dev.slne.surf.trophy.api.trophy.ReceivedTrophy
 import dev.slne.surf.trophy.api.trophy.Trophy
