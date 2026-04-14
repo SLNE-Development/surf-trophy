@@ -11,15 +11,21 @@ import dev.slne.surf.api.paper.inventory.framework.view.paginatedSurfView
 import dev.slne.surf.api.paper.inventory.framework.view.pagination.pagination
 import dev.slne.surf.api.paper.inventory.framework.view.settings
 import dev.slne.surf.api.paper.inventory.framework.view.settings.PaginationViewRows
+import dev.slne.surf.api.paper.inventory.framework.view.state.get
+import dev.slne.surf.api.paper.inventory.framework.view.state.initialState
 import dev.slne.surf.trophy.api.player.TrophyPlayer
 import dev.slne.surf.trophy.core.paper.util.item
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-fun otherTrophiesMenu(player: TrophyPlayer) = paginatedSurfView("${player.name}'s Trophäen") {
+fun otherTrophiesMenu() = paginatedSurfView("Trophaen") {
+    val playerHolder = initialState<TrophyPlayer>("player")
+
     pagination {
-        lazySource { player.trophies }
+        lazySource { context ->
+            playerHolder[context].trophies
+        }
 
         elementFactory { _, builder, _, trophy ->
             builder.withItem(trophy.trophy.item.apply {
@@ -50,6 +56,7 @@ fun otherTrophiesMenu(player: TrophyPlayer) = paginatedSurfView("${player.name}'
     layoutTarget('L')
 
     onFirstRender {
+        val player = playerHolder[this] ?: return@onFirstRender
         player.selectedTrophy?.let { selected ->
             slot(5, 1) {
                 withItem(selected.trophy.item.apply {

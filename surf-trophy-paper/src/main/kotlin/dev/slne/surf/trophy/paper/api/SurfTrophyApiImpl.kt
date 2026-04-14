@@ -18,14 +18,14 @@ class SurfTrophyApiImpl : SurfTrophyApi, Services.Fallback {
         val trophyPlayer = PlayerTrophyService.findPlayerByUuid(target) ?: return
 
         if (trophyPlayer.trophies.isEmpty()) {
-            noTrophiesMenu(trophyPlayer, viewerPlayer).open(viewerPlayer)
+            noTrophiesMenu().open(viewerPlayer, mapOf("target" to trophyPlayer))
             return
         }
 
         if (target == viewer) {
-            ownTrophiesMenu(trophyPlayer).open(viewerPlayer)
+            ownTrophiesMenu().open(viewerPlayer, mapOf("player" to trophyPlayer))
         } else {
-            otherTrophiesMenu(trophyPlayer).open(viewerPlayer)
+            otherTrophiesMenu().open(viewerPlayer, mapOf("player" to trophyPlayer))
         }
     }
 }

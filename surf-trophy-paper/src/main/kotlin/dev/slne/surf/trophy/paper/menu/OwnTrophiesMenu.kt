@@ -12,6 +12,8 @@ import dev.slne.surf.api.paper.inventory.framework.view.paginatedSurfView
 import dev.slne.surf.api.paper.inventory.framework.view.pagination.pagination
 import dev.slne.surf.api.paper.inventory.framework.view.settings
 import dev.slne.surf.api.paper.inventory.framework.view.settings.PaginationViewRows
+import dev.slne.surf.api.paper.inventory.framework.view.state.get
+import dev.slne.surf.api.paper.inventory.framework.view.state.initialState
 import dev.slne.surf.trophy.api.player.TrophyPlayer
 import dev.slne.surf.trophy.core.common.service.PlayerTrophyService
 import dev.slne.surf.trophy.core.paper.util.item
@@ -20,9 +22,10 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-fun ownTrophiesMenu(player: TrophyPlayer) = paginatedSurfView("Deine Trophäen") {
+fun ownTrophiesMenu() = paginatedSurfView("Deine Trophaen") {
+    val playerHolder = initialState<TrophyPlayer>("player")
     pagination {
-        lazySource { player.trophies }
+        lazySource { context -> playerHolder[context].trophies }
 
         elementFactory { _, builder, _, trophy ->
             builder.withItem(trophy.trophy.item.clone().apply {
@@ -47,6 +50,7 @@ fun ownTrophiesMenu(player: TrophyPlayer) = paginatedSurfView("Deine Trophäen")
                     }
                 }
             }).onItemClick {
+                val player = playerHolder[this]
                 val bukkitPlayer = this.player
                 val current = player.selectedTrophy
 
@@ -70,6 +74,7 @@ fun ownTrophiesMenu(player: TrophyPlayer) = paginatedSurfView("Deine Trophäen")
     }
 
     onClose {
+        val player = playerHolder[this]
         plugin.launch {
             PlayerTrophyService.savePlayer(player)
         }

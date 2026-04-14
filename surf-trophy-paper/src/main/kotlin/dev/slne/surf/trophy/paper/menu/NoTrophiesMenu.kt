@@ -8,21 +8,27 @@ import dev.slne.surf.api.paper.inventory.framework.dsl.slot
 import dev.slne.surf.api.paper.inventory.framework.view.AbstractSurfView
 import dev.slne.surf.api.paper.inventory.framework.view.onFirstRender
 import dev.slne.surf.api.paper.inventory.framework.view.settings
+import dev.slne.surf.api.paper.inventory.framework.view.state.get
+import dev.slne.surf.api.paper.inventory.framework.view.state.initialState
 import dev.slne.surf.api.paper.inventory.framework.view.surfView
 import dev.slne.surf.trophy.api.player.TrophyPlayer
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Material
-import org.bukkit.entity.Player
 
-fun noTrophiesMenu(target: TrophyPlayer, viewer: Player): AbstractSurfView =
-    surfView("Deine Trophäen") {
+fun noTrophiesMenu(): AbstractSurfView =
+    surfView("Keine Trophaen") {
+        val targetHolder = initialState<TrophyPlayer>("target")
+
         settings {
-            rows(5)
+            rows(3)
             cancelAllInteractions()
         }
 
         onFirstRender {
-            slot(4, 2) {
+            val target = targetHolder[this]
+            val viewer = this.player
+
+            slot(2, 5) {
                 withItem(buildItem(Material.BARRIER) {
                     displayName {
                         if (target.uuid == viewer.uniqueId) {
