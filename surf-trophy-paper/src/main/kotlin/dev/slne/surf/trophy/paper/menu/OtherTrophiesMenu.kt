@@ -24,7 +24,7 @@ fun otherTrophiesMenu() = paginatedSurfView("Trophaen") {
 
     pagination {
         lazySource { context ->
-            playerHolder[context].trophies
+            playerHolder[context].trophies.sortedBy { it.receivedAt }
         }
 
         elementFactory { _, builder, _, trophy ->

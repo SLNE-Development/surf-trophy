@@ -25,7 +25,7 @@ import java.time.ZonedDateTime
 fun ownTrophiesMenu() = paginatedSurfView("Deine Trophaen") {
     val playerHolder = initialState<TrophyPlayer>("player")
     pagination {
-        lazySource { context -> playerHolder[context].trophies }
+        lazySource { context -> playerHolder[context].trophies.sortedBy { it.receivedAt } }
 
         elementFactory { _, builder, _, trophy ->
             builder.withItem(trophy.trophy.item.clone().apply {
