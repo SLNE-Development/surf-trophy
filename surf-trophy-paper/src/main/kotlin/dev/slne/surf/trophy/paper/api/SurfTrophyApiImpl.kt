@@ -31,5 +31,5 @@ class SurfTrophyApiImpl : SurfTrophyApi, Services.Fallback {
     }
 
     override suspend fun getOrLoadTrophies(targetUuid: UUID): List<ReceivedTrophy> =
-        PlayerTrophyService.findPlayerByUuid(targetUuid)?.trophies ?: emptyList()
+        PlayerTrophyService.loadOrGetPlayerByUuid(targetUuid)?.trophies ?: emptyList()
 }
