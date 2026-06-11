@@ -59,7 +59,39 @@ fun ownTrophiesMenu() = paginatedSurfView("Trophaen") {
                     bukkitPlayer.inventory.setItemInOffHand(null)
                 } else {
                     player.selectedTrophy = trophy
-                    bukkitPlayer.inventory.setItemInOffHand(trophy.trophy.item)
+                    bukkitPlayer.inventory.setItemInOffHand(trophy.trophy.item.clone().apply {
+                        displayName {
+                            variableValue(trophy.trophy.name)
+                        }
+
+                        buildLore {
+                            emptyLine()
+                            line {
+                                variableValue("Beschreibung:".toSmallCaps())
+                            }
+
+                            line {
+                                note(trophy.trophy.description)
+                            }
+
+                            emptyLine()
+
+                            line {
+                                variableValue("Erhalten am:".toSmallCaps())
+                            }
+
+                            line {
+                                note(
+                                    dateTimeFormatter.format(
+                                        ZonedDateTime.ofInstant(
+                                            Instant.ofEpochMilli(trophy.receivedAt),
+                                            ZoneId.of("Europe/Berlin")
+                                        )
+                                    )
+                                )
+                            }
+                        }
+                    })
                 }
 
                 this.update()

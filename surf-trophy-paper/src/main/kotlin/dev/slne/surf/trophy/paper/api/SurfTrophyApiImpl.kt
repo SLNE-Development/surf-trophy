@@ -3,6 +3,7 @@ package dev.slne.surf.trophy.paper.api
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.paper.inventory.framework.open
 import dev.slne.surf.trophy.api.SurfTrophyApi
+import dev.slne.surf.trophy.api.trophy.ReceivedTrophy
 import dev.slne.surf.trophy.core.common.service.PlayerTrophyService
 import dev.slne.surf.trophy.paper.menu.noTrophiesMenu
 import dev.slne.surf.trophy.paper.menu.otherTrophiesMenu
@@ -28,4 +29,7 @@ class SurfTrophyApiImpl : SurfTrophyApi, Services.Fallback {
             otherTrophiesMenu().open(viewerPlayer, mapOf("player" to trophyPlayer))
         }
     }
+
+    override suspend fun getOrLoadTrophies(targetUuid: UUID): List<ReceivedTrophy> =
+        PlayerTrophyService.findPlayerByUuid(targetUuid)?.trophies ?: emptyList()
 }
