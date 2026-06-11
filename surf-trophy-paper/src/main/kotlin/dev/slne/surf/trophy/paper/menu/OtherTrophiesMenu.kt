@@ -58,7 +58,7 @@ fun otherTrophiesMenu() = paginatedSurfView("Trophaen") {
     onFirstRender {
         val player = playerHolder[this] ?: return@onFirstRender
         player.selectedTrophy?.let { selected ->
-            slot(5, 1) {
+            slot(4, 1) {
                 withItem(selected.trophy.item.apply {
                     displayName { variableValue("Ausgewählt".toSmallCaps()) }
                 })
