@@ -66,6 +66,25 @@ object PlayerTrophyRepository {
             deletedRows > 0
         }
 
+    suspend fun saveSelectedTrophy(playerUuid: UUID, trophy: Trophy?): Boolean =
+        suspendTransaction {
+            SelectedTrophyTable.deleteWhere { SelectedTrophyTable.playerUuid eq playerUuid }
+
+            if (trophy == null) return@suspendTransaction true
+
+            val trophyId =
+                TrophiesTable.selectAll().where(TrophiesTable.uuid eq trophy.uuid)
+                    .firstOrNull()?.get(TrophiesTable.id)?.value
+                    ?: return@suspendTransaction false
+
+            SelectedTrophyTable.insert {
+                it[this.playerUuid] = playerUuid
+                it[this.trophyId] = trophyId
+            }
+
+            true
+        }
+
     suspend fun savePlayer(trophyPlayer: TrophyPlayer) = suspendTransaction {
         PlayerTrophiesTable.deleteWhere { PlayerTrophiesTable.playerUuid eq trophyPlayer.uuid }
 

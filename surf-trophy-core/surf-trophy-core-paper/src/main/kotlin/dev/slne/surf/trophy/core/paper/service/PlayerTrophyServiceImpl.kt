@@ -8,6 +8,7 @@ import dev.slne.surf.trophy.api.trophy.ReceivedTrophy
 import dev.slne.surf.trophy.api.trophy.Trophy
 import dev.slne.surf.trophy.core.common.rabbit.packet.request.player.GiveTrophyRequestPacket
 import dev.slne.surf.trophy.core.common.rabbit.packet.request.player.LoadTrophyPlayerRequestPacket
+import dev.slne.surf.trophy.core.common.rabbit.packet.request.player.SaveSelectedTrophyRequestPacket
 import dev.slne.surf.trophy.core.common.rabbit.packet.request.player.SaveTrophyPlayerRequestPacket
 import dev.slne.surf.trophy.core.common.rabbit.packet.request.player.TakeTrophyRequestPacket
 import dev.slne.surf.trophy.core.common.service.PlayerTrophyService
@@ -105,4 +106,15 @@ class PlayerTrophyServiceImpl : PlayerTrophyService, Services.Fallback {
         PaperTrophyInstance.paperLoader.rabbitApi.sendRequest(
             SaveTrophyPlayerRequestPacket(trophyPlayer)
         ).trophyPlayer
+
+    override suspend fun saveSelectedTrophy(trophyPlayer: TrophyPlayer): Boolean {
+        PlayerTrophyService.cachePlayer(trophyPlayer)
+
+        return PaperTrophyInstance.paperLoader.rabbitApi.sendRequest(
+            SaveSelectedTrophyRequestPacket(
+                trophyPlayer.uuid,
+                trophyPlayer.selectedTrophy?.trophy
+            )
+        ).value
+    }
 }

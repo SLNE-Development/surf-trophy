@@ -4,6 +4,7 @@ import dev.slne.surf.rabbitmq.api.handler.RabbitHandler
 import dev.slne.surf.rabbitmq.api.packet.standard.response.primitive.PrimitiveResponse
 import dev.slne.surf.trophy.core.common.rabbit.packet.request.player.GiveTrophyRequestPacket
 import dev.slne.surf.trophy.core.common.rabbit.packet.request.player.LoadTrophyPlayerRequestPacket
+import dev.slne.surf.trophy.core.common.rabbit.packet.request.player.SaveSelectedTrophyRequestPacket
 import dev.slne.surf.trophy.core.common.rabbit.packet.request.player.SaveTrophyPlayerRequestPacket
 import dev.slne.surf.trophy.core.common.rabbit.packet.request.player.TakeTrophyRequestPacket
 import dev.slne.surf.trophy.core.common.rabbit.packet.response.NullableTrophyPlayerResponsePacket
@@ -41,6 +42,18 @@ object PlayerTrophiesHandler {
         packet.respond(
             TrophyPlayerResponsePacket(
                 PlayerTrophyRepository.savePlayer(packet.trophyPlayer)
+            )
+        )
+    }
+
+    @RabbitHandler
+    fun onSaveSelectedTrophyPacket(packet: SaveSelectedTrophyRequestPacket) = packet.launch {
+        packet.respond(
+            PrimitiveResponse.BooleanResponsePacket(
+                PlayerTrophyRepository.saveSelectedTrophy(
+                    packet.playerUuid,
+                    packet.selectedTrophy
+                )
             )
         )
     }
