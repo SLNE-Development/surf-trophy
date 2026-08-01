@@ -25,6 +25,7 @@ interface PlayerTrophyService {
     suspend fun loadOrGetOrCreatePlayerByUuidAndName(uuid: UUID, name: String): TrophyPlayer
 
     suspend fun savePlayer(trophyPlayer: TrophyPlayer): TrophyPlayer
+    suspend fun saveSelectedTrophy(trophyPlayer: TrophyPlayer): Boolean
 
     companion object : PlayerTrophyService by service {
         val INSTANCE get() = service

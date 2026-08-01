@@ -108,7 +108,7 @@ fun ownTrophiesMenu() = paginatedSurfView("Trophaen") {
     onClose {
         val player = playerHolder[this]
         plugin.launch {
-            PlayerTrophyService.savePlayer(player)
+            PlayerTrophyService.saveSelectedTrophy(player)
         }
     }
 }
