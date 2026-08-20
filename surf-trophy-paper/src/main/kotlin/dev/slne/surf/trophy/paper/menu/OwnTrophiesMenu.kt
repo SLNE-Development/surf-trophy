@@ -22,7 +22,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-fun ownTrophiesMenu() = paginatedSurfView("Trophaen") {
+fun ownTrophiesMenu() = paginatedSurfView("Trophäen") {
     val playerHolder = initialState<TrophyPlayer>("player")
     pagination {
         lazySource { context -> playerHolder[context].trophies.sortedBy { it.receivedAt } }

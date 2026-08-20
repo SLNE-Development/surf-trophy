@@ -19,7 +19,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-fun otherTrophiesMenu() = paginatedSurfView("Trophaen") {
+fun otherTrophiesMenu() = paginatedSurfView("Trophäen") {
     val playerHolder = initialState<TrophyPlayer>("player")
 
     pagination {
