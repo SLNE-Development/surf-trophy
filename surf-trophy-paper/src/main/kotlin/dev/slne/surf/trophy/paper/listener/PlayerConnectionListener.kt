@@ -1,65 +1,32 @@
 package dev.slne.surf.trophy.paper.listener
 
+import com.github.shynixn.mccoroutine.folia.entityDispatcher
 import com.github.shynixn.mccoroutine.folia.launch
-import dev.slne.surf.api.core.font.toSmallCaps
-import dev.slne.surf.api.core.util.dateTimeFormatter
-import dev.slne.surf.api.paper.builder.buildLore
-import dev.slne.surf.api.paper.builder.displayName
 import dev.slne.surf.trophy.core.common.service.PlayerTrophyService
-import dev.slne.surf.trophy.core.paper.util.item
 import dev.slne.surf.trophy.paper.plugin
+import dev.slne.surf.trophy.paper.util.trophyItem
+import kotlinx.coroutines.withContext
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
-import java.time.Instant
-import java.time.ZoneId
-import java.time.ZonedDateTime
 
 object PlayerConnectionListener : Listener {
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
         plugin.launch {
+            val paperPlayer = event.player
             val player = PlayerTrophyService.loadOrGetOrCreatePlayerByUuidAndName(
-                event.player.uniqueId,
-                event.player.name
+                paperPlayer.uniqueId,
+                paperPlayer.name
             )
             PlayerTrophyService.cachePlayer(player)
+            val selectedTrophy = player.selectedTrophy
 
-            player.selectedTrophy?.let {
-                event.player.inventory.setItemInOffHand(it.trophy.item.clone().apply {
-                    displayName {
-                        variableValue(it.trophy.name)
-                    }
-
-                    buildLore {
-                        emptyLine()
-                        line {
-                            variableValue("Beschreibung:".toSmallCaps())
-                        }
-
-                        line {
-                            note(it.trophy.description)
-                        }
-
-                        emptyLine()
-
-                        line {
-                            variableValue("Erhalten am:".toSmallCaps())
-                        }
-
-                        line {
-                            note(
-                                dateTimeFormatter.format(
-                                    ZonedDateTime.ofInstant(
-                                        Instant.ofEpochMilli(it.receivedAt),
-                                        ZoneId.of("Europe/Berlin")
-                                    )
-                                )
-                            )
-                        }
-                    }
-                })
+            if (selectedTrophy != null) {
+                withContext(plugin.entityDispatcher(paperPlayer)) {
+                    paperPlayer.inventory.setItemInOffHand(trophyItem(selectedTrophy))
+                }
             }
         }
     }

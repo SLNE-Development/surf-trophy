@@ -6,16 +6,25 @@ plugins {
     id("dev.slne.surf.microservice")
 }
 
+surfCoreApi {
+    withCoreCommon()
+}
+
 surfMicroservice {
-    withRabbitModule(RabbitModule.COMMON_API)
+    withRabbitModule(RabbitModule.CLIENT_API)
 }
 
 dependencies {
-    api(projects.surfTrophyApi)
+    api(projects.surfTrophyCore.surfTrophyCoreCommon)
 }
 
 publishing {
     repositories {
         slneReleases()
     }
+}
+
+sourceSets.test {
+    compileClasspath += sourceSets.main.get().compileClasspath
+    runtimeClasspath += sourceSets.main.get().compileClasspath
 }

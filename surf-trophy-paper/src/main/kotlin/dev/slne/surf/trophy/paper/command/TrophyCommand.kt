@@ -2,25 +2,25 @@ package dev.slne.surf.trophy.paper.command
 
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.jorel.commandapi.kotlindsl.*
-import dev.slne.surf.api.core.font.toSmallCaps
-import dev.slne.surf.api.core.messages.adventure.buildText
-import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.api.core.messages.pagination.Pagination
 import dev.slne.surf.api.paper.inventory.framework.open
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.paper.command.argument.surfOfflinePlayerArgument
 import dev.slne.surf.trophy.api.trophy.Trophy
+import dev.slne.surf.trophy.core.client.command.TrophyMessages
+import dev.slne.surf.trophy.core.client.command.giveMessage
+import dev.slne.surf.trophy.core.client.command.giveTrophy
+import dev.slne.surf.trophy.core.client.command.takeMessage
+import dev.slne.surf.trophy.core.client.command.takeTrophy
 import dev.slne.surf.trophy.core.common.service.PlayerTrophyService
 import dev.slne.surf.trophy.core.common.service.TrophyService
-import dev.slne.surf.trophy.core.paper.util.itemStackToString
 import dev.slne.surf.trophy.paper.command.argument.trophyArgument
 import dev.slne.surf.trophy.paper.menu.noTrophiesMenu
 import dev.slne.surf.trophy.paper.menu.otherTrophiesMenu
 import dev.slne.surf.trophy.paper.menu.ownTrophiesMenu
 import dev.slne.surf.trophy.paper.permission.PermissionRegistry
 import dev.slne.surf.trophy.paper.plugin
+import dev.slne.surf.trophy.paper.util.itemStackToString
 import kotlinx.coroutines.Deferred
-import net.kyori.adventure.text.format.TextDecoration
 import java.util.*
 
 fun trophyCommand() = commandTree("trophy") {
@@ -29,10 +29,7 @@ fun trophyCommand() = commandTree("trophy") {
         val trophyPlayer = PlayerTrophyService.findPlayerByUuid(player.uniqueId)
 
         if (trophyPlayer == null) {
-            player.sendText {
-                appendErrorPrefix()
-                error("Deine Daten konnten nicht geladen werden.")
-            }
+            player.sendMessage(TrophyMessages.dataNotLoaded)
             return@playerExecutor
         }
 
@@ -49,10 +46,7 @@ fun trophyCommand() = commandTree("trophy") {
                 val targetPlayer = target.await()?.uuid?.let {
                     PlayerTrophyService.loadOrGetPlayerByUuid(it)
                 } ?: run {
-                    player.sendText {
-                        appendErrorPrefix()
-                        error("Der Spieler wurde nicht gefunden.")
-                    }
+                    player.sendMessage(TrophyMessages.playerNotFound)
                     return@launch
                 }
 
@@ -75,10 +69,7 @@ fun trophyCommand() = commandTree("trophy") {
                 plugin.launch {
                     TrophyService.refreshTrophies()
 
-                    executor.sendText {
-                        appendSuccessPrefix()
-                        success("Alle Trophäen wurden neu geladen.")
-                    }
+                    executor.sendMessage(TrophyMessages.trophiesRefreshed)
                 }
             }
         }
@@ -93,10 +84,7 @@ fun trophyCommand() = commandTree("trophy") {
                         val item = player.inventory.itemInMainHand
 
                         if (item.isEmpty) {
-                            player.sendText {
-                                appendErrorPrefix()
-                                error("Du musst ein Item in der Hand halten, um eine Trophäe zu erstellen.")
-                            }
+                            player.sendMessage(TrophyMessages.noItemInHand)
                             return@playerExecutor
                         }
 
@@ -111,10 +99,7 @@ fun trophyCommand() = commandTree("trophy") {
                             TrophyService.cacheTrophy(trophy)
                             TrophyService.saveTrophy(trophy)
 
-                            player.sendText {
-                                appendSuccessPrefix()
-                                success("Die Trophäe wurde erstellt.")
-                            }
+                            player.sendMessage(TrophyMessages.trophyCreated)
                         }
                     }
                 }
@@ -128,15 +113,9 @@ fun trophyCommand() = commandTree("trophy") {
 
                     plugin.launch {
                         if (TrophyService.deleteTrophy(trophy)) {
-                            player.sendText {
-                                appendSuccessPrefix()
-                                success("Die Trophäe wurde gelöscht.")
-                            }
+                            player.sendMessage(TrophyMessages.trophyDeleted)
                         } else {
-                            player.sendText {
-                                appendErrorPrefix()
-                                error("Die Trophäe wurde nicht gefunden.")
-                            }
+                            player.sendMessage(TrophyMessages.trophyNotFound)
                         }
                     }
                 }
@@ -145,24 +124,7 @@ fun trophyCommand() = commandTree("trophy") {
 
         literalArgument("list") {
             anyExecutor { executor, _ ->
-                val pagination = Pagination<Trophy> {
-                    title { primary("Trophäen".toSmallCaps(), TextDecoration.BOLD) }
-                    rowRenderer { trophy, _ ->
-                        listOf(buildText {
-                            spacer("- ")
-                            variableValue(trophy.name)
-
-                            hoverEvent(buildText {
-                                variableValue(trophy.description)
-                            })
-                        })
-                    }
-                }
-
-                executor.sendText {
-                    appendNewline()
-                    append(pagination.renderComponent(TrophyService.getTrophies()))
-                }
+                executor.sendMessage(TrophyMessages.trophyList(TrophyService.getTrophies()))
             }
         }
 
@@ -174,27 +136,9 @@ fun trophyCommand() = commandTree("trophy") {
                         val trophy: Trophy by args
 
                         plugin.launch {
-                            val targetPlayer = target.await()?.uuid?.let {
-                                PlayerTrophyService.loadOrGetPlayerByUuid(it)
-                            } ?: run {
-                                player.sendText {
-                                    appendErrorPrefix()
-                                    error("Der Spieler wurde nicht gefunden.")
-                                }
-                                return@launch
-                            }
-
-                            if (PlayerTrophyService.giveTrophy(targetPlayer, trophy)) {
-                                player.sendText {
-                                    appendSuccessPrefix()
-                                    success("Die Trophäe wurde dem Spieler gegeben.")
-                                }
-                            } else {
-                                player.sendText {
-                                    appendErrorPrefix()
-                                    error("Der Spieler besitzt die Trophäe bereits.")
-                                }
-                            }
+                            player.sendMessage(
+                                giveTrophy(target.await()?.uuid, trophy).giveMessage()
+                            )
                         }
                     }
                 }
@@ -209,27 +153,9 @@ fun trophyCommand() = commandTree("trophy") {
                         val trophy: Trophy by args
 
                         plugin.launch {
-                            val targetPlayer = target.await()?.uuid?.let {
-                                PlayerTrophyService.loadOrGetPlayerByUuid(it)
-                            } ?: run {
-                                player.sendText {
-                                    appendErrorPrefix()
-                                    error("Der Spieler wurde nicht gefunden.")
-                                }
-                                return@launch
-                            }
-
-                            if (PlayerTrophyService.takeTrophy(targetPlayer, trophy)) {
-                                player.sendText {
-                                    appendSuccessPrefix()
-                                    success("Die Trophäe wurde dem Spieler genommen.")
-                                }
-                            } else {
-                                player.sendText {
-                                    appendErrorPrefix()
-                                    error("Der Spieler besitzt die Trophäe nicht.")
-                                }
-                            }
+                            player.sendMessage(
+                                takeTrophy(target.await()?.uuid, trophy).takeMessage()
+                            )
                         }
                     }
                 }

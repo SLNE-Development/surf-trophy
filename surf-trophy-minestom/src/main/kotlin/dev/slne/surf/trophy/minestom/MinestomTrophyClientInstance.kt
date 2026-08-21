@@ -1,4 +1,4 @@
-package dev.slne.surf.trophy.paper
+package dev.slne.surf.trophy.minestom
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.trophy.core.client.TrophyClientInstance
@@ -7,6 +7,6 @@ import net.kyori.adventure.util.Services
 import java.nio.file.Path
 
 @AutoService(TrophyInstance::class)
-class PaperTrophyInstanceImpl : TrophyClientInstance(), Services.Fallback {
-    override val dataPath: Path get() = plugin.dataPath
+class MinestomTrophyClientInstance : TrophyClientInstance(), Services.Fallback {
+    override val dataPath: Path get() = SurfTrophyMinestomEntrypoint.dataPath
 }

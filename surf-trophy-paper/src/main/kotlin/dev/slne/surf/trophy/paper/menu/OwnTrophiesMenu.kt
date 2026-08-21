@@ -1,10 +1,6 @@
 package dev.slne.surf.trophy.paper.menu
 
 import com.github.shynixn.mccoroutine.folia.launch
-import dev.slne.surf.api.core.font.toSmallCaps
-import dev.slne.surf.api.core.util.dateTimeFormatter
-import dev.slne.surf.api.paper.builder.buildLore
-import dev.slne.surf.api.paper.builder.displayName
 import dev.slne.surf.api.paper.inventory.framework.dsl.onItemClick
 import dev.slne.surf.api.paper.inventory.framework.view.layoutTarget
 import dev.slne.surf.api.paper.inventory.framework.view.onClose
@@ -16,11 +12,8 @@ import dev.slne.surf.api.paper.inventory.framework.view.state.get
 import dev.slne.surf.api.paper.inventory.framework.view.state.initialState
 import dev.slne.surf.trophy.api.player.TrophyPlayer
 import dev.slne.surf.trophy.core.common.service.PlayerTrophyService
-import dev.slne.surf.trophy.core.paper.util.item
 import dev.slne.surf.trophy.paper.plugin
-import java.time.Instant
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import dev.slne.surf.trophy.paper.util.trophyItem
 
 fun ownTrophiesMenu() = paginatedSurfView("Trophaen") {
     val playerHolder = initialState<TrophyPlayer>("player")
@@ -28,28 +21,7 @@ fun ownTrophiesMenu() = paginatedSurfView("Trophaen") {
         lazySource { context -> playerHolder[context].trophies.sortedBy { it.receivedAt } }
 
         elementFactory { _, builder, _, trophy ->
-            builder.withItem(trophy.trophy.item.clone().apply {
-                displayName { variableValue(trophy.trophy.name) }
-
-                buildLore {
-                    emptyLine()
-                    line { variableValue("Beschreibung:".toSmallCaps()) }
-                    line { note(trophy.trophy.description) }
-
-                    emptyLine()
-                    line { variableValue("Erhalten am:".toSmallCaps()) }
-                    line {
-                        note(
-                            dateTimeFormatter.format(
-                                ZonedDateTime.ofInstant(
-                                    Instant.ofEpochMilli(trophy.receivedAt),
-                                    ZoneId.of("Europe/Berlin")
-                                )
-                            )
-                        )
-                    }
-                }
-            }).onItemClick {
+            builder.withItem(trophyItem(trophy)).onItemClick {
                 val player = playerHolder[this]
                 val bukkitPlayer = this.player
                 val current = player.selectedTrophy
@@ -59,39 +31,7 @@ fun ownTrophiesMenu() = paginatedSurfView("Trophaen") {
                     bukkitPlayer.inventory.setItemInOffHand(null)
                 } else {
                     player.selectedTrophy = trophy
-                    bukkitPlayer.inventory.setItemInOffHand(trophy.trophy.item.clone().apply {
-                        displayName {
-                            variableValue(trophy.trophy.name)
-                        }
-
-                        buildLore {
-                            emptyLine()
-                            line {
-                                variableValue("Beschreibung:".toSmallCaps())
-                            }
-
-                            line {
-                                note(trophy.trophy.description)
-                            }
-
-                            emptyLine()
-
-                            line {
-                                variableValue("Erhalten am:".toSmallCaps())
-                            }
-
-                            line {
-                                note(
-                                    dateTimeFormatter.format(
-                                        ZonedDateTime.ofInstant(
-                                            Instant.ofEpochMilli(trophy.receivedAt),
-                                            ZoneId.of("Europe/Berlin")
-                                        )
-                                    )
-                                )
-                            }
-                        }
-                    })
+                    bukkitPlayer.inventory.setItemInOffHand(trophyItem(trophy))
                 }
 
                 this.update()
