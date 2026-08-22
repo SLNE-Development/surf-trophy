@@ -13,5 +13,5 @@ surfPaperPluginApi {
 }
 
 dependencies {
-    api(projects.surfTrophyCore.surfTrophyCorePaper)
+    api(projects.surfTrophyCore.surfTrophyCoreClient)
 }

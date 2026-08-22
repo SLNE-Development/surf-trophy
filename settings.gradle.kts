@@ -1,8 +1,9 @@
 include("surf-trophy-api")
 include("surf-trophy-paper")
+include("surf-trophy-minestom")
 include("surf-trophy-microservice")
 include("surf-trophy-core:surf-trophy-core-common")
-include("surf-trophy-core:surf-trophy-core-paper")
+include("surf-trophy-core:surf-trophy-core-client")
 
 pluginManagement {
     repositories {

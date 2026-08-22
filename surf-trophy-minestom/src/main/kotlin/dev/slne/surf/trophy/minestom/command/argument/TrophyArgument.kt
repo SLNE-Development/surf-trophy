@@ -1,22 +1,21 @@
-package dev.slne.surf.trophy.paper.command.argument
+package dev.slne.surf.trophy.minestom.command.argument
 
-import dev.jorel.commandapi.CommandAPICommand
-import dev.jorel.commandapi.CommandTree
-import dev.jorel.commandapi.arguments.Argument
-import dev.jorel.commandapi.arguments.ArgumentSuggestions
-import dev.jorel.commandapi.arguments.CustomArgument
-import dev.jorel.commandapi.arguments.TextArgument
+import dev.slne.minestom.lobby.api.command.commandapi.CommandAPI
+import dev.slne.minestom.lobby.api.command.commandapi.CommandAPICommand
+import dev.slne.minestom.lobby.api.command.commandapi.CommandTree
+import dev.slne.minestom.lobby.api.command.commandapi.argument.Argument
+import dev.slne.minestom.lobby.api.command.commandapi.argument.CustomArgument
+import dev.slne.minestom.lobby.api.command.commandapi.argument.TextArgument
+import dev.slne.minestom.lobby.api.command.commandapi.suggestion.ArgumentSuggestions
 import dev.slne.surf.trophy.api.trophy.Trophy
 import dev.slne.surf.trophy.core.client.command.TrophyArgumentSupport
 import dev.slne.surf.trophy.core.client.command.TrophyMessages
 
 class TrophyArgument(nodeName: String) :
     CustomArgument<Trophy, String>(TextArgument(nodeName), { info ->
-        val input = TrophyArgumentSupport.normalizeInput(info.input)
+        val input = TrophyArgumentSupport.normalizeInput(info.currentInput)
         TrophyArgumentSupport.resolve(input)
-            ?: throw CustomArgumentException.fromAdventureComponent(
-                TrophyMessages.unknownTrophy(input)
-            )
+            ?: CommandAPI.failWithMessage(TrophyMessages.unknownTrophy(input))
     }) {
     init {
         this.replaceSuggestions(

@@ -3,8 +3,8 @@ package dev.slne.surf.trophy.paper
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.api.paper.inventory.framework.register
+import dev.slne.surf.trophy.core.client.TrophyClientInstance
 import dev.slne.surf.trophy.core.common.service.TrophyService
-import dev.slne.surf.trophy.core.paper.PaperTrophyInstance
 import dev.slne.surf.trophy.paper.command.trophyCommand
 import dev.slne.surf.trophy.paper.listener.PlayerConnectionListener
 import dev.slne.surf.trophy.paper.menu.noTrophiesMenu
@@ -16,7 +16,7 @@ val plugin get() = JavaPlugin.getPlugin(PaperMain::class.java)
 
 class PaperMain : SuspendingJavaPlugin() {
     override suspend fun onLoadAsync() {
-        PaperTrophyInstance.paperLoader.onLoad()
+        TrophyClientInstance.INSTANCE.onLoad()
 
         noTrophiesMenu().register()
         otherTrophiesMenu().register()
@@ -24,7 +24,7 @@ class PaperMain : SuspendingJavaPlugin() {
     }
 
     override suspend fun onEnableAsync() {
-        PaperTrophyInstance.paperLoader.onEnable()
+        TrophyClientInstance.INSTANCE.onEnable()
 
         PlayerConnectionListener.register()
         trophyCommand()
@@ -33,6 +33,6 @@ class PaperMain : SuspendingJavaPlugin() {
     }
 
     override suspend fun onDisableAsync() {
-        PaperTrophyInstance.paperLoader.onDisable()
+        TrophyClientInstance.INSTANCE.onDisable()
     }
 }
