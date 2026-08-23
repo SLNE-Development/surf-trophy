@@ -15,7 +15,7 @@ import dev.slne.surf.trophy.minestom.util.item
 import dev.slne.surf.trophy.minestom.util.trophyItem
 import dev.slne.surf.trophy.minestom.util.withDisplayName
 
-val otherTrophiesMenu = paginatedSurfView("Trophaen") {
+val otherTrophiesMenu = paginatedSurfView("Trophäen") {
     val playerHolder = initialState<TrophyPlayer>("player")
 
     pagination {

@@ -16,7 +16,7 @@ import dev.slne.surf.trophy.minestom.util.trophyItem
 import kotlinx.coroutines.launch
 import net.minestom.server.item.ItemStack
 
-val ownTrophiesMenu = paginatedSurfView("Trophaen") {
+val ownTrophiesMenu = paginatedSurfView("Trophäen") {
     val playerHolder = initialState<TrophyPlayer>("player")
     pagination {
         lazySource { context -> playerHolder[context].trophies.sortedBy { it.receivedAt } }
