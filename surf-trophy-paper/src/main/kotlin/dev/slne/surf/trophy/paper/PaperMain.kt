@@ -18,9 +18,9 @@ class PaperMain : SuspendingJavaPlugin() {
     override suspend fun onLoadAsync() {
         TrophyClientInstance.INSTANCE.onLoad()
 
-        noTrophiesMenu().register()
-        otherTrophiesMenu().register()
-        ownTrophiesMenu().register()
+        noTrophiesMenu.register()
+        otherTrophiesMenu.register()
+        ownTrophiesMenu.register()
     }
 
     override suspend fun onEnableAsync() {

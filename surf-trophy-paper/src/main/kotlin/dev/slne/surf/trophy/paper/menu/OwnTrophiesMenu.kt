@@ -11,14 +11,15 @@ import dev.slne.surf.api.paper.inventory.framework.view.settings.PaginationViewR
 import dev.slne.surf.api.paper.inventory.framework.view.state.get
 import dev.slne.surf.api.paper.inventory.framework.view.state.initialState
 import dev.slne.surf.trophy.api.player.TrophyPlayer
+import dev.slne.surf.trophy.core.client.player.trophiesByReceivedAt
 import dev.slne.surf.trophy.core.common.service.PlayerTrophyService
 import dev.slne.surf.trophy.paper.plugin
 import dev.slne.surf.trophy.paper.util.trophyItem
 
-fun ownTrophiesMenu() = paginatedSurfView("Trophaen") {
+val ownTrophiesMenu = paginatedSurfView("Trophaen") {
     val playerHolder = initialState<TrophyPlayer>("player")
     pagination {
-        lazySource { context -> playerHolder[context].trophies.sortedBy { it.receivedAt } }
+        lazySource { context -> playerHolder[context].trophiesByReceivedAt() }
 
         elementFactory { _, builder, _, trophy ->
             builder.withItem(trophyItem(trophy)).onItemClick {

@@ -5,6 +5,7 @@ import dev.slne.minestom.lobby.api.extension.ConnectionManager
 import dev.slne.surf.api.minestom.inventory.framework.open
 import dev.slne.surf.trophy.api.SurfTrophyApi
 import dev.slne.surf.trophy.api.trophy.ReceivedTrophy
+import dev.slne.surf.trophy.core.client.player.trophiesSnapshot
 import dev.slne.surf.trophy.core.common.service.PlayerTrophyService
 import dev.slne.surf.trophy.minestom.menu.noTrophiesMenu
 import dev.slne.surf.trophy.minestom.menu.otherTrophiesMenu
@@ -30,5 +31,5 @@ class SurfTrophyApiImpl : SurfTrophyApi {
     }
 
     override suspend fun getOrLoadTrophies(targetUuid: UUID): List<ReceivedTrophy> =
-        PlayerTrophyService.loadOrGetPlayerByUuid(targetUuid)?.trophies ?: emptyList()
+        PlayerTrophyService.loadOrGetPlayerByUuid(targetUuid)?.trophiesSnapshot() ?: emptyList()
 }

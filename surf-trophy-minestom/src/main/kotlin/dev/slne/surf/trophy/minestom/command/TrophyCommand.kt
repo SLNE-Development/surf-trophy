@@ -127,7 +127,7 @@ private suspend fun Player.openTrophies(target: TrophyPlayer) =
     withContext(MinestomDispatchers.Main) {
         if (target.trophies.isEmpty()) {
             noTrophiesMenu.open(this@openTrophies, mapOf("target" to target))
+        } else {
+            otherTrophiesMenu.open(this@openTrophies, mapOf("player" to target))
         }
-
-        otherTrophiesMenu.open(this@openTrophies, mapOf("player" to target))
     }

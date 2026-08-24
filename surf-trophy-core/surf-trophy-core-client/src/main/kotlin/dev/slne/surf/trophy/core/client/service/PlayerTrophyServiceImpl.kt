@@ -52,9 +52,7 @@ class PlayerTrophyServiceImpl : PlayerTrophyService {
         trophy: Trophy
     ): Boolean {
         val receiveTrophy = ReceivedTrophy(trophy, System.currentTimeMillis())
-        player.trophies.add(receiveTrophy)
-
-        cachePlayer(player)
+        mutateTrophies(player) { it.add(receiveTrophy) }
 
         return rabbitApi.sendRequest(
             GiveTrophyRequestPacket(
@@ -68,9 +66,10 @@ class PlayerTrophyServiceImpl : PlayerTrophyService {
         player: TrophyPlayer,
         trophy: Trophy
     ): Boolean {
-        player.trophies.removeIf { it.trophy.uuid == trophy.uuid }
+        mutateTrophies(player) { trophies ->
+            trophies.removeIf { it.trophy.uuid == trophy.uuid }
+        }
 
-        cachePlayer(player)
         return rabbitApi.sendRequest(
             TakeTrophyRequestPacket(
                 player.uuid,
@@ -102,14 +101,18 @@ class PlayerTrophyServiceImpl : PlayerTrophyService {
         SaveTrophyPlayerRequestPacket(trophyPlayer)
     ).trophyPlayer
 
-    override suspend fun saveSelectedTrophy(trophyPlayer: TrophyPlayer): Boolean {
-        cachePlayer(trophyPlayer)
-
-        return rabbitApi.sendRequest(
+    override suspend fun saveSelectedTrophy(trophyPlayer: TrophyPlayer): Boolean =
+        rabbitApi.sendRequest(
             SaveSelectedTrophyRequestPacket(
                 trophyPlayer.uuid,
                 trophyPlayer.selectedTrophy?.trophy
             )
         ).value
+
+    private inline fun mutateTrophies(
+        player: TrophyPlayer,
+        change: (MutableList<ReceivedTrophy>) -> Unit
+    ) {
+        synchronized(player.trophies) { change(player.trophies) }
     }
 }

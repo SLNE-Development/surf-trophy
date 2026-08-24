@@ -15,7 +15,7 @@ import dev.slne.surf.trophy.core.client.message.noTrophiesDisplayName
 import dev.slne.surf.trophy.core.client.message.noTrophiesLore
 import org.bukkit.Material
 
-fun noTrophiesMenu(): AbstractSurfView =
+val noTrophiesMenu: AbstractSurfView =
     surfView("Keine Trophaen") {
         val targetHolder = initialState<TrophyPlayer>("target")
 

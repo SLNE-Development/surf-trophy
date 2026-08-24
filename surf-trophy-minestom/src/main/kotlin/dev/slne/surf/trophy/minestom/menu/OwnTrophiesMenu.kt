@@ -11,6 +11,7 @@ import dev.slne.surf.api.minestom.inventory.framework.view.settings.PaginationVi
 import dev.slne.surf.api.minestom.inventory.framework.view.state.get
 import dev.slne.surf.api.minestom.inventory.framework.view.state.initialState
 import dev.slne.surf.trophy.api.player.TrophyPlayer
+import dev.slne.surf.trophy.core.client.player.trophiesByReceivedAt
 import dev.slne.surf.trophy.core.common.service.PlayerTrophyService
 import dev.slne.surf.trophy.minestom.util.trophyItem
 import kotlinx.coroutines.launch
@@ -19,7 +20,7 @@ import net.minestom.server.item.ItemStack
 val ownTrophiesMenu = paginatedSurfView("Trophaen") {
     val playerHolder = initialState<TrophyPlayer>("player")
     pagination {
-        lazySource { context -> playerHolder[context].trophies.sortedBy { it.receivedAt } }
+        lazySource { context -> playerHolder[context].trophiesByReceivedAt() }
 
         elementFactory { _, builder, _, trophy ->
             builder.withItem(trophyItem(trophy)).onItemClick {
