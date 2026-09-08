@@ -2,6 +2,8 @@ package dev.slne.surf.trophy.minestom.menu
 
 import dev.slne.surf.api.minestom.inventory.framework.dsl.slot
 import dev.slne.surf.api.minestom.inventory.framework.dsl.withItem
+import dev.slne.surf.api.minestom.inventory.framework.view.container.dsl.blockRow
+import dev.slne.surf.api.minestom.inventory.framework.view.containerDefaults
 import dev.slne.surf.api.minestom.inventory.framework.view.onFirstRender
 import dev.slne.surf.api.minestom.inventory.framework.view.settings
 import dev.slne.surf.api.minestom.inventory.framework.view.state.get
@@ -12,12 +14,18 @@ import dev.slne.surf.trophy.core.client.message.noTrophiesDisplayName
 import dev.slne.surf.trophy.core.client.message.noTrophiesLore
 import net.minestom.server.item.Material
 
-val noTrophiesMenu = surfView("Keine Trophaen") {
+val noTrophiesMenu = surfView("Keine Trophäen") {
     val targetHolder = initialState<TrophyPlayer>("target")
 
     settings {
         rows(3)
         cancelAllInteractions()
+    }
+
+    containerDefaults {
+        blockRow(1)
+        blockRow(2)
+        blockRow(3)
     }
 
     onFirstRender {

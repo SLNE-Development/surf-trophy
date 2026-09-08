@@ -18,7 +18,7 @@ import dev.slne.surf.trophy.core.client.message.trophyDisplayName
 import dev.slne.surf.trophy.core.client.player.trophiesByReceivedAt
 import dev.slne.surf.trophy.paper.util.item
 
-val otherTrophiesMenu = paginatedSurfView("Trophaen") {
+val otherTrophiesMenu = paginatedSurfView("Trophäen") {
     val playerHolder = initialState<TrophyPlayer>("player")
 
     pagination {
