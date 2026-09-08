@@ -33,7 +33,7 @@ fun trophyCommand() = commandTree("trophy") {
             return@playerExecutor
         }
 
-        ownTrophiesMenu().open(player, mapOf("player" to trophyPlayer))
+        ownTrophiesMenu.open(player, mapOf("player" to trophyPlayer))
     }
 
     surfOfflinePlayerArgument("target") {
@@ -51,10 +51,10 @@ fun trophyCommand() = commandTree("trophy") {
                 }
 
                 if (targetPlayer.trophies.isEmpty()) {
-                    noTrophiesMenu().open(player, mapOf("target" to targetPlayer))
+                    noTrophiesMenu.open(player, mapOf("target" to targetPlayer))
+                } else {
+                    otherTrophiesMenu.open(player, mapOf("player" to targetPlayer))
                 }
-
-                otherTrophiesMenu().open(player, mapOf("player" to targetPlayer))
             }
         }
     }

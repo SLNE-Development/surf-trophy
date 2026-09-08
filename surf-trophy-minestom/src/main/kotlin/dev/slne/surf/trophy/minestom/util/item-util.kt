@@ -1,5 +1,6 @@
 package dev.slne.surf.trophy.minestom.util
 
+import com.github.benmanes.caffeine.cache.Caffeine
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.trophy.api.trophy.Trophy
 import net.kyori.adventure.nbt.BinaryTagIO
@@ -12,6 +13,18 @@ private val log = logger()
 
 private const val GZIP_MAGIC_FIRST = 0x1f.toByte()
 private const val GZIP_MAGIC_SECOND = 0x8b.toByte()
+
+/**
+ * How many distinct encoded trophy items stay decoded.
+ */
+private const val DECODED_ITEM_CACHE_SIZE = 256L
+
+/**
+ * Trophy items kept in their decoded form, keyed by the encoding they were read from.
+ */
+private val decodedItems = Caffeine.newBuilder()
+    .maximumSize(DECODED_ITEM_CACHE_SIZE)
+    .build<String, ItemStack>()
 
 val FALLBACK_TROPHY_MATERIAL: Material = Material.BARRIER
 
@@ -42,10 +55,12 @@ fun itemStackFromString(encoded: String): ItemStack? = try {
  * cannot be read.
  */
 val Trophy.item: ItemStack
-    get() = itemStackFromString(itemString) ?: run {
-        log.atWarning()
-            .log("Trophy '$name' falls back to $FALLBACK_TROPHY_MATERIAL")
-        ItemStack.of(FALLBACK_TROPHY_MATERIAL)
+    get() = decodedItems.get(itemString) { encoded ->
+        itemStackFromString(encoded) ?: run {
+            log.atWarning()
+                .log("Trophy '$name' falls back to $FALLBACK_TROPHY_MATERIAL")
+            ItemStack.of(FALLBACK_TROPHY_MATERIAL)
+        }
     }
 
 private fun compressionOf(bytes: ByteArray) = if (

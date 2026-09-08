@@ -25,13 +25,18 @@ class ConnectionListener @Inject constructor() : EventRegistrar {
                     player.uuid,
                     player.username
                 )
+
+                if (!player.isOnline) return@launch
                 PlayerTrophyService.cachePlayer(trophyPlayer)
-                val selectedTrophy = trophyPlayer.selectedTrophy
-                if (selectedTrophy != null) {
-                    player.withEntity {
-                        player.itemInOffHand = trophyItem(selectedTrophy)
-                    }
+                if (!player.isOnline) {
+                    PlayerTrophyService.invalidatePlayer(player.uuid)
+                    return@launch
                 }
+
+                val selectedTrophy = trophyPlayer.selectedTrophy ?: return@launch
+
+                val item = trophyItem(selectedTrophy)
+                player.withEntity { it.itemInOffHand = item }
             }
         }
 

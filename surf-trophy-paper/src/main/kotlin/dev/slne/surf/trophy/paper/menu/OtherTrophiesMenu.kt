@@ -15,14 +15,15 @@ import dev.slne.surf.trophy.api.player.TrophyPlayer
 import dev.slne.surf.trophy.core.client.message.receivedTrophyLore
 import dev.slne.surf.trophy.core.client.message.selectedTrophyDisplayName
 import dev.slne.surf.trophy.core.client.message.trophyDisplayName
+import dev.slne.surf.trophy.core.client.player.trophiesByReceivedAt
 import dev.slne.surf.trophy.paper.util.item
 
-fun otherTrophiesMenu() = paginatedSurfView("Trophäen") {
+val otherTrophiesMenu = paginatedSurfView("Trophäen") {
     val playerHolder = initialState<TrophyPlayer>("player")
 
     pagination {
         lazySource { context ->
-            playerHolder[context].trophies.sortedBy { it.receivedAt }
+            playerHolder[context].trophiesByReceivedAt()
         }
 
         elementFactory { _, builder, _, trophy ->

@@ -8,12 +8,13 @@ import dev.slne.surf.api.paper.inventory.framework.view.*
 import dev.slne.surf.api.paper.inventory.framework.view.container.dsl.blockRow
 import dev.slne.surf.api.paper.inventory.framework.view.state.get
 import dev.slne.surf.api.paper.inventory.framework.view.state.initialState
+import dev.slne.surf.api.paper.inventory.framework.view.surfView
 import dev.slne.surf.trophy.api.player.TrophyPlayer
 import dev.slne.surf.trophy.core.client.message.noTrophiesDisplayName
 import dev.slne.surf.trophy.core.client.message.noTrophiesLore
 import org.bukkit.Material
 
-fun noTrophiesMenu(): AbstractSurfView =
+val noTrophiesMenu: AbstractSurfView =
     surfView("Keine Trophäen") {
         val targetHolder = initialState<TrophyPlayer>("target")
 

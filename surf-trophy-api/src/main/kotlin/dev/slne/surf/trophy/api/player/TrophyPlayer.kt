@@ -9,5 +9,5 @@ data class TrophyPlayer(
     val uuid: SerializableUUID,
     val name: String,
     val trophies: MutableList<ReceivedTrophy>,
-    var selectedTrophy: ReceivedTrophy?
+    @Volatile var selectedTrophy: ReceivedTrophy?
 )

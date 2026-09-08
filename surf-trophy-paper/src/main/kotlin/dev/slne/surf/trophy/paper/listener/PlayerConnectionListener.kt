@@ -14,19 +14,25 @@ import org.bukkit.event.player.PlayerQuitEvent
 object PlayerConnectionListener : Listener {
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
+        val paperPlayer = event.player
+
         plugin.launch {
-            val paperPlayer = event.player
             val player = PlayerTrophyService.loadOrGetOrCreatePlayerByUuidAndName(
                 paperPlayer.uniqueId,
                 paperPlayer.name
             )
-            PlayerTrophyService.cachePlayer(player)
-            val selectedTrophy = player.selectedTrophy
 
-            if (selectedTrophy != null) {
-                withContext(plugin.entityDispatcher(paperPlayer)) {
-                    paperPlayer.inventory.setItemInOffHand(trophyItem(selectedTrophy))
-                }
+            if (!paperPlayer.isConnected) return@launch
+            PlayerTrophyService.cachePlayer(player)
+            if (!paperPlayer.isConnected) {
+                PlayerTrophyService.invalidatePlayer(paperPlayer.uniqueId)
+                return@launch
+            }
+
+            val selectedTrophy = player.selectedTrophy ?: return@launch
+
+            withContext(plugin.entityDispatcher(paperPlayer)) {
+                paperPlayer.inventory.setItemInOffHand(trophyItem(selectedTrophy))
             }
         }
     }
