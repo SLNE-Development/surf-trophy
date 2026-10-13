@@ -1,12 +1,12 @@
 package dev.slne.surf.trophy.minestom.command
 
-import dev.slne.minestom.lobby.api.command.commandapi.dsl.anyExecutor
-import dev.slne.minestom.lobby.api.command.commandapi.dsl.anyExecutorSuspend
-import dev.slne.minestom.lobby.api.command.commandapi.dsl.commandTree
-import dev.slne.minestom.lobby.api.command.commandapi.dsl.literalArgument
-import dev.slne.minestom.lobby.api.command.commandapi.dsl.playerExecutor
-import dev.slne.minestom.lobby.api.command.commandapi.dsl.playerExecutorSuspend
-import dev.slne.minestom.lobby.api.coroutine.MinestomDispatchers
+import dev.slne.surf.api.minestom.command.dsl.anyExecutor
+import dev.slne.surf.api.minestom.command.dsl.anyExecutorSuspend
+import dev.slne.surf.api.minestom.command.dsl.commandTree
+import dev.slne.surf.api.minestom.command.dsl.literalArgument
+import dev.slne.surf.api.minestom.command.dsl.playerExecutor
+import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
+import dev.slne.surf.api.minestom.coroutine.MinestomDispatchers
 import dev.slne.surf.api.minestom.inventory.framework.open
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.minestom.command.argument.surfOfflinePlayerArgument

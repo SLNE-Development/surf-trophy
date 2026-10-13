@@ -1,7 +1,7 @@
 package dev.slne.surf.trophy.minestom.api
 
 import com.google.auto.service.AutoService
-import dev.slne.minestom.lobby.api.extension.ConnectionManager
+import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.api.minestom.inventory.framework.open
 import dev.slne.surf.trophy.api.SurfTrophyApi
 import dev.slne.surf.trophy.api.trophy.ReceivedTrophy

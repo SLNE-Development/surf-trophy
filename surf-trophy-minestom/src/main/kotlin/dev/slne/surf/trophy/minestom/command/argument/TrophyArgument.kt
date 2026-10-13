@@ -1,12 +1,12 @@
 package dev.slne.surf.trophy.minestom.command.argument
 
-import dev.slne.minestom.lobby.api.command.commandapi.CommandAPI
-import dev.slne.minestom.lobby.api.command.commandapi.CommandAPICommand
-import dev.slne.minestom.lobby.api.command.commandapi.CommandTree
-import dev.slne.minestom.lobby.api.command.commandapi.argument.Argument
-import dev.slne.minestom.lobby.api.command.commandapi.argument.CustomArgument
-import dev.slne.minestom.lobby.api.command.commandapi.argument.TextArgument
-import dev.slne.minestom.lobby.api.command.commandapi.suggestion.ArgumentSuggestions
+import dev.slne.surf.api.minestom.command.CommandAPI
+import dev.slne.surf.api.minestom.command.CommandAPICommand
+import dev.slne.surf.api.minestom.command.CommandTree
+import dev.slne.surf.api.minestom.command.argument.Argument
+import dev.slne.surf.api.minestom.command.argument.CustomArgument
+import dev.slne.surf.api.minestom.command.argument.TextArgument
+import dev.slne.surf.api.minestom.command.suggestion.ArgumentSuggestions
 import dev.slne.surf.trophy.api.trophy.Trophy
 import dev.slne.surf.trophy.core.client.command.TrophyArgumentSupport
 import dev.slne.surf.trophy.core.client.command.TrophyMessages

@@ -1,6 +1,6 @@
 package dev.slne.surf.trophy.minestom.menu
 
-import dev.slne.minestom.lobby.api.coroutine.minestomAsyncScope
+import dev.slne.surf.api.minestom.coroutine.minestomAsyncScope
 import dev.slne.surf.api.minestom.inventory.framework.dsl.onItemClick
 import dev.slne.surf.api.minestom.inventory.framework.view.layoutTarget
 import dev.slne.surf.api.minestom.inventory.framework.view.onClose

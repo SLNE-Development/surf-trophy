@@ -8,5 +8,5 @@ import java.nio.file.Path
 
 @AutoService(TrophyInstance::class)
 class MinestomTrophyClientInstance : TrophyClientInstance(), Services.Fallback {
-    override val dataPath: Path get() = SurfTrophyMinestomEntrypoint.dataPath
+    override val dataPath: Path get() = SurfTrophyMinestomPlugin.dataDirectory
 }

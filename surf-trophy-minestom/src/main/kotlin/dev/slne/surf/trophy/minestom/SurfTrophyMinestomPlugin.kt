@@ -1,23 +1,37 @@
 package dev.slne.surf.trophy.minestom
 
-import com.google.auto.service.AutoService
-import dev.slne.minestom.lobby.api.plugin.MinestomPlugin
-import dev.slne.minestom.lobby.api.plugin.annotation.MinestomPluginMeta
-import dev.slne.surf.trophy.minestom.command.TrophyCommandRegistrar
+import dev.slne.surf.api.minestom.inventory.framework.register
+import dev.slne.surf.api.minestom.plugin.SurfMinestomPlugin
+import dev.slne.surf.trophy.core.client.TrophyClientInstance
+import dev.slne.surf.trophy.core.common.service.TrophyService
+import dev.slne.surf.trophy.minestom.command.trophyCommand
 import dev.slne.surf.trophy.minestom.listener.ConnectionListener
+import dev.slne.surf.trophy.minestom.menu.noTrophiesMenu
+import dev.slne.surf.trophy.minestom.menu.otherTrophiesMenu
+import dev.slne.surf.trophy.minestom.menu.ownTrophiesMenu
 
-@AutoService(MinestomPlugin::class)
-@MinestomPluginMeta(
-    "surf-trophy-minestom",
-    dependsOn = [
-        "surf-api-minestom",
-        "surf-rabbitmq-minestom",
-        "surf-core-minestom"
-    ]
-)
-class SurfTrophyMinestomPlugin : MinestomPlugin(SurfTrophyMinestomEntrypoint::class.java) {
-    override fun configurePlugin() {
-        bindCommandRegistrar<TrophyCommandRegistrar>()
-        bindEventRegistrar<ConnectionListener>()
+object SurfTrophyMinestomPlugin : SurfMinestomPlugin() {
+    override suspend fun onLoad() {
+        val instance = TrophyClientInstance.INSTANCE
+
+        instance.onLoad()
+
+        noTrophiesMenu.register()
+        otherTrophiesMenu.register()
+        ownTrophiesMenu.register()
+
+        instance.onEnable()
+
+        TrophyService.refreshTrophies()
+    }
+
+    override suspend fun onEnable() {
+        trophyCommand()
+
+        ConnectionListener.register(eventNode)
+    }
+
+    override suspend fun onDisable() {
+        TrophyClientInstance.INSTANCE.onDisable()
     }
 }

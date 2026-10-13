@@ -14,6 +14,20 @@ surfMicroservice {
     withRabbitModule(RabbitModule.CLIENT_API)
 }
 
+repositories {
+    mavenLocal()
+}
+
+minestomPluginFile {
+    id = "surf-trophy-minestom"
+    main = "dev.slne.surf.trophy.minestom.SurfTrophyMinestomPlugin"
+    authors = listOf("red")
+
+    pluginDependencies {
+        register("surf-rabbitmq-minestom")
+    }
+}
+
 dependencies {
     api(projects.surfTrophyCore.surfTrophyCoreClient)
 }
