@@ -20,12 +20,11 @@ object SurfTrophyMinestomPlugin : SurfMinestomPlugin() {
         otherTrophiesMenu.register()
         ownTrophiesMenu.register()
 
-        instance.onEnable()
-
         TrophyService.refreshTrophies()
     }
 
     override suspend fun onEnable() {
+        TrophyClientInstance.INSTANCE.onEnable()
         trophyCommand()
 
         ConnectionListener.register(eventNode)
