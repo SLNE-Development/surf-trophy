@@ -10,7 +10,7 @@ dependencies {
 }
 
 surfStandaloneApi {
-    withSurfDatabaseR2dbc("2.3.1", "dev.slne.surf.trophy.libs.database")
+    withSurfDatabaseR2dbc("2.3.5", "dev.slne.surf.trophy.libs.database")
 }
 
 surfMicroservice {
